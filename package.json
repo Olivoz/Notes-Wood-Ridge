@@ -1,0 +1,30 @@
+{
+  "name": "notes-wood-ridge",
+  "version": "1.0.0",
+  "description": "A web application for storing notes",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Olivoz/Notes-Wood-Ridge.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "rest",
+    "notes",
+    "web",
+    "vuejs"
+  ],
+  "author": "Olivoz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Olivoz/Notes-Wood-Ridge/issues"
+  },
+  "homepage": "https://github.com/Olivoz/Notes-Wood-Ridge#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
