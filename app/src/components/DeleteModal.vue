@@ -78,6 +78,7 @@ export default {
     description: String,
     buttonText: String,
     closeButton: Function,
+    note: Object,
   },
 };
 </script>

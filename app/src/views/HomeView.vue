@@ -14,16 +14,42 @@ export default {
     openDeleteMenu: function () {
       this.deleteOpen = true;
     },
-    closeDeleteMenu: function () {
+    closeDeleteMenu: function (note) {
       this.deleteOpen = false;
+      notes.splice(notes.indexOf(note), 1);
     },
   },
 };
+
+let notes = [
+  {
+    title: "Hello, World!",
+  },
+  {
+    title: "Hello",
+  },
+  {
+    title: "World!",
+  },
+  {
+    title: "Hello, World!!!!",
+  },
+];
+
+let toDelete;
 </script>
 
 <template>
-  <NoteCard :onRemove="openDeleteMenu"
-    ><h1 class="font-semibold">Untitled</h1></NoteCard
+  <NoteCard
+    v-for="note in notes"
+    :onRemove="
+      () => {
+        toDelete = note;
+        openDeleteMenu();
+      }
+    "
+    :note="note"
+    ><h1 class="font-semibold">{{ note.title }}</h1></NoteCard
   >
 
   <DeleteModal
@@ -31,6 +57,6 @@ export default {
     title="Remove note"
     description="Are you sure you want to remove this note? Removing this note will move it to the Recycle Bin"
     buttonText="Yes, remove!"
-    :closeButton="closeDeleteMenu"
+    :closeButton="() => closeDeleteMenu(toDelete)"
   />
 </template>
