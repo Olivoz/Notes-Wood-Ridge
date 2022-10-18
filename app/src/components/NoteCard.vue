@@ -1,23 +1,25 @@
 <script setup>
 import { Bars3Icon, TrashIcon } from "@heroicons/vue/24/outline";
+import { def } from "@vue/shared";
 </script>
 
 <script>
-function deleteNote() {
-  console.log("deleted note");
-}
+export default {
+  props: {
+    onRemove: Function,
+  },
+};
 </script>
 
 <template>
-  <div class="mt-10 mx-12 h-8">
-    <slot />
+  <div class="mt-10 h-8">
     <button
-      class="flex justify-between text-white py-2 px-6 bg-slate-500 rounded-xl w-full"
+      class="flex justify-between py-2 px-6 bg-slate-200 rounded-xl w-full"
     >
-      <p>Title</p>
+      <slot />
       <TrashIcon
         class="hover:text-red-500 h-6"
-        v-on:click="deleteNote()"
+        v-on:click="onRemove()"
       ></TrashIcon>
     </button>
   </div>
