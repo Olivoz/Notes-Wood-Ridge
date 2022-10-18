@@ -22,6 +22,11 @@ const router = createRouter({
       name: "edit",
       component: () => import("../views/EditNoteView.vue"),
     },
+    {
+      path: "/trash",
+      name: "trash",
+      component: () => import("../views/RecycleBinView.vue"),
+    },
   ],
 });
 
