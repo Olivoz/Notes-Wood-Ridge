@@ -1,5 +1,5 @@
 <script setup>
-import NoteCard from "./components/NoteCard.vue";
+import NoteCard from "../components/NoteCard.vue";
 </script>
 
 <template>
