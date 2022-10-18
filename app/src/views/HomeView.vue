@@ -1,3 +1,7 @@
+<script setup>
+import NoteCard from "./components/NoteCard.vue";
+</script>
+
 <template>
-  <h1>Home</h1>
+  <NoteCard></NoteCard>
 </template>
