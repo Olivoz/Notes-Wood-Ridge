@@ -17,9 +17,9 @@ export default {
       sidebarOpen: false,
     };
   },
-  methods: {
-    toggleSidebar: function () {
-      this.sidebarOpen = !this.sidebarOpen;
+  computed: {
+    currentRouteName() {
+      return this.$route.name;
     },
   },
 };
@@ -29,25 +29,27 @@ export default {
   <div class="flex h-full w-full">
     <aside
       :class="[sidebarOpen ? '' : 'hidden']"
-      class="w-48 h-full bg-slate-200 px-3 flex-shrink-0"
+      class="w-48 h-full bg-slate-200 px-3 flex-shrink-0 sm:block"
     >
-      <button
-        v-for="item in sidebarItems"
-        :key="item.name"
-        @click="item.onclick"
-        class="w-full text-left bg-white hover:bg-slate-300 px-3 py-2 my-3 rounded-md text-base"
-      >
-        {{ item.name }}
-      </button>
+      <div class="mt-14">
+        <button
+          v-for="item in sidebarItems"
+          :key="item.name"
+          @click="item.onclick"
+          class="w-full text-left bg-white hover:bg-slate-300 px-3 py-2 my-3 rounded-md text-base"
+        >
+          {{ item.name }}
+        </button>
+      </div>
     </aside>
 
     <div class="flex flex-col w-full">
-      <header class="flex justify-between items-center p-4">
+      <header class="flex justify-center items-center p-4">
         <!-- Mobile menu button-->
         <button
-          class="rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+          class="absolute left-4 rounded-md p-2 sm:hidden text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
           type="button"
-          @click="toggleSidebar"
+          @click="sidebarOpen = !sidebarOpen"
         >
           <span class="sr-only">Open main menu</span>
           <Bars3Icon
@@ -57,8 +59,9 @@ export default {
           />
           <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
         </button>
+        <h1 class="text-2xl">{{ currentRouteName }}</h1>
         <!-- Profile dropdown -->
-        <Menu as="div" class="relative ml-3">
+        <Menu as="div" class="absolute right-4">
           <div>
             <MenuButton
               class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -116,7 +119,7 @@ export default {
           </transition>
         </Menu>
       </header>
-      <main class="flex-grow overflow-x-hidden overflow-y-auto px-4">
+      <main class="flex-grow overflow-auto px-4">
         <RouterView />
       </main>
     </div>

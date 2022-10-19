@@ -6,7 +6,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "My Notes",
       component: HomeView,
     },
     {
@@ -19,12 +19,12 @@ const router = createRouter({
     },
     {
       path: "/edit",
-      name: "edit",
+      name: "Edit note",
       component: () => import("../views/EditNoteView.vue"),
     },
     {
       path: "/trash",
-      name: "trash",
+      name: "Recycle Bin",
       component: () => import("../views/RecycleBinView.vue"),
     },
   ],
