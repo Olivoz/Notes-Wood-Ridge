@@ -1,7 +1,6 @@
 <template>
-  <div class="fixed inset-0 items-center justify-center hidden"></div>
   <TransitionRoot appear :show="open" as="template">
-    <Dialog as="div" @close="closeButton" class="relative z-10">
+    <Dialog @click="cancelButton" as="div" class="relative z-10">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -46,7 +45,7 @@
                 <button
                   type="button"
                   class="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-white text-sm font-medium hover:bg-red-200"
-                  @click="closeButton"
+                  @click="confirmButton"
                 >
                   {{ buttonText }}
                 </button>
@@ -66,7 +65,6 @@ import {
   Dialog,
   DialogPanel,
   DialogTitle,
-  PopoverGroup,
 } from "@headlessui/vue";
 </script>
 
@@ -77,7 +75,8 @@ export default {
     title: String,
     description: String,
     buttonText: String,
-    closeButton: Function,
+    confirmButton: Function,
+    cancelButton: Function,
     note: Object,
   },
 };

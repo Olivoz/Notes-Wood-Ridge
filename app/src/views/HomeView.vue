@@ -14,8 +14,11 @@ export default {
     openDeleteMenu: function () {
       this.deleteOpen = true;
     },
-    closeDeleteMenu: function (note) {
+    cancelDeleteMenu: function () {
       this.deleteOpen = false;
+    },
+    closeDeleteMenu: function (note) {
+      this.cancelDeleteMenu();
       notes.splice(notes.indexOf(note), 1);
     },
   },
@@ -57,6 +60,7 @@ let toDelete;
     title="Remove note"
     description="Are you sure you want to remove this note? Removing this note will move it to the Recycle Bin"
     buttonText="Yes, remove!"
-    :closeButton="() => closeDeleteMenu(toDelete)"
+    :confirmButton="() => closeDeleteMenu(toDelete)"
+    :cancelButton="cancelDeleteMenu"
   />
 </template>
