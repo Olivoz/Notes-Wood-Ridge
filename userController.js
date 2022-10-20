@@ -1,102 +1,174 @@
 require("dotenv").config();
 
-//Options parametern tar ett objekt av
-//parametern som sedan skickas till select-metoden.
-const express = require("express");
-const fs = require("fs");
-const server = express();
-
-var Airtable = require("airtable");
+const Airtable = require("airtable");
 var base = new Airtable({ apiKey: process.env.AIRTABLE_APIKEY }).base(
   process.env.AIRTABLE_BASE
 );
+
+/*
 var contacts = [];
 
-const bodyparser = require("body-parser");
-server.use(bodyparser.urlencoded({ extended: true }));
-
-server.listen(8080);
-
-server.get("/contacts", (req, res) => {
-  base("UserData")
-    .select({
-      view: "Grid view",
-    })
-    .firstPage(function (err, records) {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      records.forEach(function (record) {
-        var contact = {
-          Name: record.get("Gmail"),
-          Number: record.get("DisplayName"),
-          Password: record.get("Password"),
-        };
-        contacts.push(contact);
-      });
-      res.send(contacts);
-      console.log(contacts);
-    });
-});
-
-/*  
-
-exports.getAirtableRecords = (table, options) => {
-    let records = [],
-        params = {
-            view: 'Grid view',
-            pagesize: 15
-          
-        };
-
-    // Promise, föståelse.
-        // kan ändra pagesize senare!
-             //varför punkter??  /rad 25
-
-   Object.assign(params, options);
-
-
-    return new Promise ((resolve, reject) => {
-        // Cache värdet om results redan kallats tidigare
-        if (records.length > 0) {
-            resolve(records);
-        };
-
-        const processPage = (partialRecords, fetchNextPage) => {
-            records = [...records, ...partialRecords];
-            fetchNextPage();
-        };
-
-        const processRecords = (err) => {
-            if (err) {
-                reject (err);
-                return;
-            };
-            resolve(records);
-        };
-        table.select(params).eachPage(processPage, processRecords);
-    });
-};
-
-
-exports.getUserByEmail = (req,res,next) => {
-    const { username, password } = req.body;
-    const options = {
-        filterByFormula: `OR(email = '${username}',username = '${username}')`
-    };
-//OR(logical1, [logical2, …]) Returns true if any one of the 
-//arguments is true. Example OR(Finished, Reviewed)
-    data.getAirtableRecords(table, options)
-    .then (users => {
-        users.forEach(function(user) {
-            //kallar på nästa mellanprogram(middleware), alltså (function)
-            // bekräftat lösenord
-            next();
+function getUsers() {
+  return new Promise((resolve, reject) => {
+    base("UserData")
+      .select({
+        view: "Grid view",
+      })
+      .firstPage((err, records) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        records.forEach((record) => {
+          const user = {
+            email: record.get("email"),
+            name: record.get("name"),
+            password: record.get("password"),
+            notes: record.get("notes"),
+          };
+          contacts.push(user);
         });
-    }).catch(err => {
-        console.log( Error (err));
-    });
+        resolve(contacts);
+      });
+  });
 }
-      
-    */
+*/
+
+function getNote(id) {
+  return new Promise((resolve, reject) => {
+    base("Notes")
+      .find(id)
+      .then((record) => {
+        const note = {
+          id: id,
+          owner: record.get("owner"),
+          title: record.get("title"),
+          content: record.get("content"),
+        };
+        resolve(note);
+      })
+      .catch((err) => reject(err));
+  });
+}
+
+function getUser(id) {
+  return new Promise((resolve, reject) => {
+    base("UserData")
+      .find(id)
+      .then((record) => {
+        const user = {
+          id: id,
+          email: record.get("email"),
+          name: record.get("name"),
+          password: record.get("password"),
+          notes: record.get("notes"),
+        };
+        resolve(user);
+      })
+      .catch((err) => reject(err));
+  });
+}
+
+function createUser(user) {
+  return base("UserData").create([
+    {
+      fields: {
+        email: user.email,
+        name: user.displayName,
+        password: user.password,
+        notes: JSON.stringify([]),
+      },
+    },
+  ]);
+}
+
+function createNote(user, note) {
+  return new Promise((resolve, reject) => {
+    base("Notes")
+      .create([
+        {
+          fields: {
+            owner: user.id,
+            title: note.title,
+            content: note.content,
+          },
+        },
+      ])
+      .then((noteId) => {
+        user.notes.push(noteId);
+        base("UserData")
+          .update([
+            {
+              id: user.id,
+              fields: {
+                notes: JSON.stringify(user.notes),
+              },
+            },
+          ])
+          .then(() => resolve(noteId))
+          .catch((err) => reject(err));
+      })
+      .catch((err) => reject(err));
+  });
+}
+
+function updateUser(id, change) {
+  return base("UserData").update([
+    {
+      id: id,
+      fields: change,
+    },
+  ]);
+}
+
+function updateNote(id, change) {
+  return base("Notes").update([
+    {
+      id: id,
+      fields: change,
+    },
+  ]);
+}
+
+function deleteUser(user) {
+  return new Promise((resolve, reject) => {
+    getUser(user.id)
+      .then((user) => {
+        user.notes.forEach(deleteNote); // Use a deleteNotes to prevent rate limit?
+      })
+      .then(() => {
+        base("UserData")
+          .destroy(user.id)
+          .then((res) => resolve(res))
+          .catch((err) => reject(err));
+      })
+      .catch((err) => reject(err));
+  });
+}
+
+function deleteNote(note) {
+  deleteNotes([note]);
+}
+
+function deleteNotes(notes) {
+  // The Airtable API has a max amount of 10 records per request. This splits the array in to usable chunks.
+  const chunkSize = 10;
+  for (let i = 0; i < notes.length; i += chunkSize) {
+    const chunk = notes.slice(i, i + chunkSize);
+    base("Notes").destroy(chunk.map((note) => note.id));
+  }
+}
+
+export {
+  getUser,
+  getNote,
+  createUser,
+  createNote,
+  updateUser,
+  updateNote,
+  createUser,
+  createNote,
+  deleteUser,
+  deleteNote,
+  deleteNotes,
+};
