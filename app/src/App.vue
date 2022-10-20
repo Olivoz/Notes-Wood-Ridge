@@ -47,7 +47,7 @@ export default {
       <header class="flex justify-center items-center p-4">
         <!-- Mobile menu button-->
         <button
-          class="absolute left-4 rounded-md p-2 sm:hidden text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+          class="absolute left-4 rounded-md p-2 sm:hidden hover:bg-slate-300"
           type="button"
           @click="sidebarOpen = !sidebarOpen"
         >
@@ -63,9 +63,7 @@ export default {
         <!-- Profile dropdown -->
         <Menu as="div" class="absolute right-4">
           <div>
-            <MenuButton
-              class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-            >
+            <MenuButton class="flex rounded-full bg-slate-200 text-sm">
               <span class="sr-only">Open user menu</span>
               <img
                 class="h-8 w-8 rounded-full"
