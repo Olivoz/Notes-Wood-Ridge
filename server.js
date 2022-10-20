@@ -1,16 +1,15 @@
-require("dotenv").config();
+const userController = require("./userController");
 const express = require("express");
 const port = 5500;
 const app = express();
-const AIRTABLE_APIKEY = process.env.AIRTABLE_APIKEY;
 
 const index = `${__dirname}/app/dist/index.html`;
 
 app.use(express.static("app/dist"));
 app.use(express.json());
 
-app.get("/api", (req, res) => {
-  res.json({ hello: "world" });
+app.get("/api/v1/user/:id", (req, res) => {
+  userController.getUser(req.params.id).then((user) => res.send(user));
 });
 
 //If no other route is found serve vue app
