@@ -82,7 +82,7 @@ export default {
         <button
           v-for="item in sidebarItems"
           :key="item.name"
-          @click="item.onclick(this)"
+          @click="() => item.onclick(this)"
           class="dark:bg-zinc-700 w-40 text-left bg-white hover:bg-slate-300 hover:dark:bg-zinc-600 px-3 py-2 my-3 rounded-md text-base"
         >
           {{ item.name }}
