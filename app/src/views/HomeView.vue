@@ -1,6 +1,8 @@
 <script setup>
 import NoteCard from "../components/NoteCard.vue";
 import DeleteModal from "../components/DeleteModal.vue";
+import RoundButton from "../components/RoundButton.vue";
+import {PlusIcon} from "@heroicons/vue/24/outline";
 </script>
 
 <script>
@@ -63,4 +65,7 @@ let toDelete;
     :confirmButton="() => closeDeleteMenu(toDelete)"
     :cancelButton="cancelDeleteMenu"
   />
+
+  <RoundButton :onClick="createNote"><PlusIcon /></RoundButton>
+
 </template>
