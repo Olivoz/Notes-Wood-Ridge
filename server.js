@@ -1,6 +1,9 @@
+require('dotenv').config();
 const express = require("express");
 const port = 5500;
 const app = express();
+const AIRTABLE_APIKEY = process.env.AIRTABLE_APIKEY;
+
 const index = `${__dirname}/app/dist/index.html`;
 
 app.use(express.static("app/dist"));
