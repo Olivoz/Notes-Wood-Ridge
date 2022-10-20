@@ -6,7 +6,7 @@ import { TrashIcon } from "@heroicons/vue/24/outline";
 
 <template>
   <NoteCard></NoteCard>
-  <RoundButton @click="deleteNote" class="bg-red-500"
+  <RoundButton @click="deleteNote" class="bg-red-500 dark:bg-red-500"
     ><TrashIcon
   /></RoundButton>
 </template>

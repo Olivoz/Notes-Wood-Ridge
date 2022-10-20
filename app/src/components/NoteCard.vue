@@ -1,6 +1,5 @@
 <script setup>
 import { Bars3Icon, TrashIcon } from "@heroicons/vue/24/outline";
-import { def } from "@vue/shared";
 </script>
 
 <script>
@@ -12,9 +11,9 @@ export default {
 </script>
 
 <template>
-  <div class="mt-10 h-8">
+  <div class="mt-10 h-8 dark:text-white">
     <button
-      class="flex justify-between py-2 px-6 bg-slate-200 rounded-xl w-full"
+      class="flex justify-between py-2 px-6 bg-slate-200 rounded-xl w-full dark:bg-zinc-800"
     >
       <slot />
       <TrashIcon
