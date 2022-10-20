@@ -1,36 +1,48 @@
-//Options parametern tar ett objekt av 
+require("dotenv").config();
+
+//Options parametern tar ett objekt av
 //parametern som sedan skickas till select-metoden.
-const express = require('express');
-const fs = require('fs');
+const express = require("express");
+const fs = require("fs");
 const server = express();
 
-    var Airtable = require('airtable');
-    var base = new Airtable({apiKey: AIRTABLE_APIKEY}).base('app3N5SzPeiGsCTKs');
-    var Contacts = [];
+var Airtable = require("airtable");
+var base = new Airtable({ apiKey: process.env.AIRTABLE_APIKEY }).base(
+  process.env.AIRTABLE_BASE
+);
+var contacts = [];
 
-const bodyparser = require('body-parser');
-    server.use(bodyparser.urlencoded({extended: true}))
+const bodyparser = require("body-parser");
+server.use(bodyparser.urlencoded({ extended: true }));
 
-server.get('/Contacts', (req,res) => {
-    base('Contacts').select({
-        view: 'Grid view'
+server.listen(8080);
 
-}).firstPage(function(err, records) {
-    if (err) { console.error(err); return; }
-        records.forEach(function(record) {
-            var contact = {Name: record.get('Gmail'), Number: record.get('display_name'), Password: record.get('Password')}
-            Contacts.push(contact)  
+server.get("/contacts", (req, res) => {
+  base("UserData")
+    .select({
+      view: "Grid view",
+    })
+    .firstPage(function (err, records) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      records.forEach(function (record) {
+        var contact = {
+          Name: record.get("Gmail"),
+          Number: record.get("DisplayName"),
+          Password: record.get("Password"),
+        };
+        contacts.push(contact);
+      });
+      res.send(contacts);
+      console.log(contacts);
     });
-    res.send(Contacts)
-    console.log(Contacts)
-});
 });
 
+/*  
 
-
-    
-
-/*exports.getAirtableRecords = (table, options) => {
+exports.getAirtableRecords = (table, options) => {
     let records = [],
         params = {
             view: 'Grid view',
@@ -42,7 +54,8 @@ server.get('/Contacts', (req,res) => {
         // kan ändra pagesize senare!
              //varför punkter??  /rad 25
 
-    Object.assign(params, options);
+   Object.assign(params, options);
+
 
     return new Promise ((resolve, reject) => {
         // Cache värdet om results redan kallats tidigare
@@ -70,9 +83,10 @@ server.get('/Contacts', (req,res) => {
 exports.getUserByEmail = (req,res,next) => {
     const { username, password } = req.body;
     const options = {
-        filterByFormula: `OR(email = '${username}', '${username}')`
+        filterByFormula: `OR(email = '${username}',username = '${username}')`
     };
-
+//OR(logical1, [logical2, …]) Returns true if any one of the 
+//arguments is true. Example OR(Finished, Reviewed)
     data.getAirtableRecords(table, options)
     .then (users => {
         users.forEach(function(user) {
@@ -85,6 +99,4 @@ exports.getUserByEmail = (req,res,next) => {
     });
 }
       
-    
-
     */
