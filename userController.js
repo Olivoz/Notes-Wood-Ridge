@@ -159,7 +159,7 @@ function deleteNotes(notes) {
   }
 }
 
-export {
+module.exports = {
   getUser,
   getNote,
   createUser,
