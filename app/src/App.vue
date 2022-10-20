@@ -51,7 +51,12 @@ export default {
         <button
           v-for="item in sidebarItems"
           :key="item.name"
-          @click="item.onclick"
+          @click="
+            () => {
+              if (item.name == 'Recycle Bin') $router.push({ path: '/trash' });
+              item.onclick();
+            }
+          "
           class="w-40 text-left bg-white hover:bg-slate-300 px-3 py-2 my-3 rounded-md text-base"
         >
           {{ item.name }}
