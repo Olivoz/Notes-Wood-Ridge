@@ -29,7 +29,7 @@ export default {
   <div class="flex h-full w-full">
     <aside
       :class="[sidebarOpen ? '' : 'hidden']"
-      class="w-48 h-full bg-slate-200 px-3 flex-shrink-0 sm:block"
+      class="w-48 h-full bg-slate-200 px-3 flex-shrink-0 sm:block absolute sm:relative"
     >
       <div class="mt-14">
         <button
