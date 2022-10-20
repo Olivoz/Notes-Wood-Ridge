@@ -21,9 +21,9 @@ export default {
     cancelDeleteMenu: function () {
       this.deleteOpen = false;
     },
-    confirmDeleteMenu: function (view, note) {
+    moveToTrash: function (noteStore, note) {
       this.cancelDeleteMenu();
-      view.noteStore.moveToTrash(note);
+      noteStore.moveToTrash(note);
     },
   },
 };
@@ -49,11 +49,11 @@ let toDelete;
     title="Remove note"
     description="Are you sure you want to remove this note? Removing this note will move it to the Recycle Bin. Press outside the box to cancel!"
     buttonText="Yes, remove!"
-    :confirmButton="() => confirmDeleteMenu(this, toDelete)"
+    :confirmButton="() => moveToTrash(noteStore, toDelete)"
     :cancelButton="cancelDeleteMenu"
   />
 
-  <RoundButton @click="this.$router.push({ path: '/edit' })"
+  <RoundButton @click="$router.push({ path: '/edit' })"
     ><PlusIcon
   /></RoundButton>
 </template>
