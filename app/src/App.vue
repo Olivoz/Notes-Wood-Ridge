@@ -26,9 +26,25 @@ export default {
 </script>
 
 <template>
+  <Transition
+    as="template"
+    enter="duration-300 ease-out"
+    enter-from="opacity-0"
+    enter-to="opacity-100"
+    leave="duration-200 ease-in"
+    leave-from="opacity-100"
+    leave-to="opacity-0"
+  >
+    <div
+      :class="[sidebarOpen ? 'z-10' : 'hidden']"
+      class="fixed inset-0 bg-black bg-opacity-25 sm:hidden"
+      @click="sidebarOpen = !sidebarOpen"
+    ></div>
+  </Transition>
+
   <div class="flex h-full w-full">
     <aside
-      :class="[sidebarOpen ? 'w-48' : 'w-0']"
+      :class="[sidebarOpen ? 'w-48 z-20' : 'w-0']"
       class="overflow-hidden h-full bg-slate-200 flex-shrink-0 sm:w-48 absolute sm:relative transition-width"
     >
       <div class="mt-14 p-4 overflow-hidden">
@@ -47,6 +63,7 @@ export default {
       <header class="flex justify-center items-center p-4">
         <!-- Mobile menu button-->
         <button
+          :class="[sidebarOpen ? 'z-20' : '']"
           class="absolute left-4 rounded-md p-2 sm:hidden hover:bg-slate-300"
           type="button"
           @click="sidebarOpen = !sidebarOpen"
