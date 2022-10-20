@@ -22,6 +22,8 @@ const themeCheck = () => {
   }
 };
 
+themeCheck();
+
 function themeSwitch() {
   const documentElement = document.documentElement;
   if (documentElement.classList.contains("dark")) {
@@ -69,7 +71,7 @@ export default {
   <div class="flex h-full w-full">
     <aside
       :class="[sidebarOpen ? 'w-48 z-20' : 'w-0']"
-      class="dark:bg-zinc-700 overflow-hidden h-full bg-slate-200 flex-shrink-0 sm:w-48 absolute sm:relative transition-width"
+      class="dark:bg-zinc-800 overflow-hidden h-full bg-slate-200 flex-shrink-0 sm:w-48 absolute sm:relative transition-width"
     >
       <div class="mt-14 p-4 overflow-hidden">
         <button
@@ -81,7 +83,7 @@ export default {
               item.onclick();
             }
           "
-          class="dark:bg-zinc-600 w-40 text-left bg-white hover:bg-slate-300 px-3 py-2 my-3 rounded-md text-base"
+          class="dark:bg-zinc-700 w-40 text-left bg-white hover:bg-slate-300 hover:dark:bg-zinc-600 px-3 py-2 my-3 rounded-md text-base"
         >
           {{ item.name }}
         </button>
@@ -93,7 +95,7 @@ export default {
         <!-- Mobile menu button-->
         <button
           :class="[sidebarOpen ? 'z-20' : '']"
-          class="absolute left-4 rounded-md p-2 sm:hidden hover:bg-slate-300"
+          class="absolute left-4 rounded-md p-2 sm:hidden hover:bg-slate-300 hover:dark:bg-zinc-500"
           type="button"
           @click="sidebarOpen = !sidebarOpen"
         >
@@ -127,13 +129,13 @@ export default {
             leave-to-class="transform opacity-0 scale-95"
           >
             <MenuItems
-              class="dark:bg-zinc-600 absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              class="dark:bg-zinc-700 absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
               <MenuItem v-slot="{ active }">
                 <a
                   href="#"
                   :class="[
-                    active ? 'bg-gray-100 dark:bg-zinc-500' : '',
+                    active ? 'bg-gray-100 dark:bg-zinc-600' : '',
                     'block px-4 py-2 text-sm text-gray-700 dark:text-white',
                   ]"
                   >Your Profile</a
@@ -143,7 +145,7 @@ export default {
                 <a
                   href="#"
                   :class="[
-                    active ? 'bg-gray-100 dark:bg-zinc-500' : '',
+                    active ? 'bg-gray-100 dark:bg-zinc-600' : '',
                     'block px-4 py-2 text-sm text-gray-700 dark:text-white',
                   ]"
                   >Settings</a
@@ -153,7 +155,7 @@ export default {
                 <a
                   href="#"
                   :class="[
-                    active ? 'bg-gray-100 dark:bg-zinc-500' : '',
+                    active ? 'bg-gray-100 dark:bg-zinc-600' : '',
                     'block px-4 py-2 text-sm text-gray-700 dark:text-white',
                   ]"
                   >Sign out</a
