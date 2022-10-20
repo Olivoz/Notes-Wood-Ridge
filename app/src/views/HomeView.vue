@@ -3,6 +3,8 @@ import NoteCard from "../components/NoteCard.vue";
 import DeleteModal from "../components/DeleteModal.vue";
 import RoundButton from "../components/RoundButton.vue";
 import { PlusIcon } from "@heroicons/vue/24/outline";
+import { useNoteStore } from "../stores/NoteStore";
+const noteStore = useNoteStore();
 </script>
 
 <script>
@@ -19,34 +21,19 @@ export default {
     cancelDeleteMenu: function () {
       this.deleteOpen = false;
     },
-    closeDeleteMenu: function (note) {
+    confirmDeleteMenu: function (view, note) {
       this.cancelDeleteMenu();
-      notes.splice(notes.indexOf(note), 1);
+      view.noteStore.moveToTrash(note);
     },
   },
 };
-
-let notes = [
-  {
-    title: "Hello, World!",
-  },
-  {
-    title: "Hello",
-  },
-  {
-    title: "World!",
-  },
-  {
-    title: "Hello, World!!!!",
-  },
-];
 
 let toDelete;
 </script>
 
 <template>
   <NoteCard
-    v-for="note in notes"
+    v-for="note in noteStore.notes"
     :onRemove="
       () => {
         toDelete = note;
@@ -62,7 +49,7 @@ let toDelete;
     title="Remove note"
     description="Are you sure you want to remove this note? Removing this note will move it to the Recycle Bin. Press outside the box to cancel!"
     buttonText="Yes, remove!"
-    :confirmButton="() => closeDeleteMenu(toDelete)"
+    :confirmButton="() => confirmDeleteMenu(this, toDelete)"
     :cancelButton="cancelDeleteMenu"
   />
 

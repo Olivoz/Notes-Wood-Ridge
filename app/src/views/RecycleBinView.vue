@@ -7,7 +7,7 @@ const noteStore = useNoteStore();
 </script>
 
 <template>
-  <NoteCard v-for="note in noteStore.notes" :note="note" />
+  <NoteCard v-for="note in noteStore.trash" :note="note" />
   <RoundButton @click="deleteNote" class="bg-red-500 dark:bg-red-500"
     ><TrashIcon
   /></RoundButton>
