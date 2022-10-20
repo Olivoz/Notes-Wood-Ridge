@@ -60,7 +60,7 @@ let toDelete;
   <DeleteModal
     :open="deleteOpen"
     title="Remove note"
-    description="Are you sure you want to remove this note? Removing this note will move it to the Recycle Bin"
+    description="Are you sure you want to remove this note? Removing this note will move it to the Recycle Bin. Press outside the box to cancel!"
     buttonText="Yes, remove!"
     :confirmButton="() => closeDeleteMenu(toDelete)"
     :cancelButton="cancelDeleteMenu"

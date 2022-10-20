@@ -27,6 +27,11 @@ const router = createRouter({
       name: "Recycle Bin",
       component: () => import("../views/RecycleBinView.vue"),
     },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "Error",
+      component: () => import("../views/ErrorView.vue"),
+    },
   ],
 });
 
