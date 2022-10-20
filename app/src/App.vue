@@ -28,15 +28,15 @@ export default {
 <template>
   <div class="flex h-full w-full">
     <aside
-      :class="[sidebarOpen ? '' : 'hidden']"
-      class="w-48 h-full bg-slate-200 px-3 flex-shrink-0 sm:block absolute sm:relative"
+      :class="[sidebarOpen ? 'w-48' : 'w-0']"
+      class="overflow-hidden h-full bg-slate-200 flex-shrink-0 sm:w-48 absolute sm:relative transition-width"
     >
-      <div class="mt-14">
+      <div class="mt-14 p-4 overflow-hidden">
         <button
           v-for="item in sidebarItems"
           :key="item.name"
           @click="item.onclick"
-          class="w-full text-left bg-white hover:bg-slate-300 px-3 py-2 my-3 rounded-md text-base"
+          class="w-40 text-left bg-white hover:bg-slate-300 px-3 py-2 my-3 rounded-md text-base"
         >
           {{ item.name }}
         </button>
