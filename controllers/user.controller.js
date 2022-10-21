@@ -8,35 +8,6 @@ var base = new Airtable({ apiKey: process.env.AIRTABLE_APIKEY }).base(
 const emailRegex =
   /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/g; // Fromhttps://html.spec.whatwg.org/multipage/input.html
 
-/*
-var contacts = [];
-
-function getUsers() {
-  return new Promise((resolve, reject) => {
-    base("UserData")
-      .select({
-        view: "Grid view",
-      })
-      .firstPage((err, records) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        records.forEach((record) => {
-          const user = {
-            email: record.get("email"),
-            name: record.get("name"),
-            password: record.get("password"),
-            notes: record.get("notes"),
-          };
-          contacts.push(user);
-        });
-        resolve(contacts);
-      });
-  });
-}
-*/
-
 function userFromRecord(record) {
   return {
     id: record.id,
@@ -72,24 +43,32 @@ function getUserById(id) {
   return new Promise((resolve, reject) => {
     base("UserData")
       .find(id)
-      .then((record) => {
-        resolve(userFromRecord(record));
-      })
-      .catch((err) => reject(err));
+      .then((record) => resolve(userFromRecord(record)))
+      .catch(reject);
   });
 }
 
-function createUser(user) {
-  return base("UserData").create([
-    {
-      fields: {
-        email: user.email,
-        name: user.displayName,
-        password: user.password,
-        notes: JSON.stringify([]),
-      },
-    },
-  ]);
+function createUser(username, email, password) {
+  return new Promise((resolve, reject) => {
+    if (!emailRegex.test(email)) {
+      reject("Invalid email!");
+      return;
+    }
+
+    base("UserData")
+      .create([
+        {
+          fields: {
+            email: email,
+            name: username,
+            password: password,
+            notes: JSON.stringify([]),
+          },
+        },
+      ])
+      .then(resolve)
+      .catch(reject);
+  });
 }
 
 function updateUser(id, change) {
@@ -108,12 +87,9 @@ function deleteUser(user) {
         user.notes.forEach(deleteNote); // Use a deleteNotes to prevent rate limit?
       })
       .then(() => {
-        base("UserData")
-          .destroy(user.id)
-          .then((res) => resolve(res))
-          .catch((err) => reject(err));
+        base("UserData").destroy(user.id).then(resolve).catch(reject);
       })
-      .catch((err) => reject(err));
+      .catch(reject);
   });
 }
 
@@ -122,6 +98,5 @@ module.exports = {
   getUserById,
   createUser,
   updateUser,
-  createUser,
   deleteUser,
 };
