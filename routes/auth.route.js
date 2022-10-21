@@ -5,7 +5,9 @@ const userController = require("../controllers/user.controller");
 const bcrypt = require("bcrypt");
 
 router.post("/login", passport.authenticate("local"), (req, res) => {
-  res.sendStatus(200);
+  const user = req.user;
+  delete user.password;
+  res.send(user);
 });
 
 router.post("/signup", (req, res) => {
@@ -37,7 +39,8 @@ router.post("/signup", (req, res) => {
               return;
             }
 
-            res.redirect("/");
+            delete newUser.password;
+            res.send(newUser);
           });
         })
         .catch(() => res.sendStatus(400));
