@@ -32,6 +32,16 @@ const router = createRouter({
       name: "Error",
       component: () => import("../views/ErrorView.vue"),
     },
+    {
+      path: "/login",
+      name: "Log In",
+      component: () => import("../views/LoginView.vue"),
+    },
+    {
+      path: "/register",
+      name: "Register",
+      component: () => import("../views/RegisterView.vue"),
+    },
   ],
 });
 
