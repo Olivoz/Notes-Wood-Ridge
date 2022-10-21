@@ -1,4 +1,5 @@
 const noteController = require("../controllers/note.controller");
+const userController = require("../controllers/user.controller");
 const express = require("express");
 const router = express.Router();
 
@@ -84,7 +85,13 @@ router.delete("/new", (req, res) => {
 
   noteController
     .createNote(user, note)
-    .then(() => res.sendStatus(200))
+    .then(() => {
+      res.sendStatus(200);
+      user.notes.push(note);
+      userController.updateUser(user.id, {
+        notes: user.notes,
+      });
+    })
     .catch(() => res.sendStatus(500));
 });
 
