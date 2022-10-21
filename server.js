@@ -1,5 +1,6 @@
 const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
+const noteRoute = require("./routes/note.route");
 
 require("./strategies/local.strategy");
 
@@ -34,6 +35,7 @@ app.use(passport.session());
 
 app.use("/auth", authRoute);
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/note", noteRoute);
 
 //If no other route is found serve vue app
 app.all("*", (req, res) => {
