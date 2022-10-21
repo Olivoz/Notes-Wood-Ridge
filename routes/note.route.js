@@ -88,9 +88,11 @@ router.delete("/new", (req, res) => {
     .then(() => {
       res.sendStatus(200);
       user.notes.push(note);
-      userController.updateUser(user.id, {
-        notes: user.notes,
-      });
+      userController
+        .updateUser(user.id, {
+          notes: user.notes,
+        })
+        .catch(console.log);
     })
     .catch(() => res.sendStatus(500));
 });
