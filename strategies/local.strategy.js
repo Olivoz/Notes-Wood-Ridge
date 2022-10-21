@@ -1,6 +1,7 @@
 const userController = require("../controllers/user.controller");
 const LocalStrategy = require("passport-local");
 const passport = require("passport");
+const bcrypt = require("bcrypt");
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -33,7 +34,8 @@ passport.use(
           return;
         }
 
-        if (user.password == password) done(null, user);
+        if (bcrypt.compareSync(password, user.password)) done(null, user);
+        else done(null, false);
       })
       .catch((err) => {
         console.log(err);
