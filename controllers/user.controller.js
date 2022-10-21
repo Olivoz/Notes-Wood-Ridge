@@ -6,7 +6,7 @@ var base = new Airtable({ apiKey: process.env.AIRTABLE_APIKEY }).base(
 );
 
 const emailRegex =
-  /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/g; // Fromhttps://html.spec.whatwg.org/multipage/input.html
+  /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/; // Fromhttps://html.spec.whatwg.org/multipage/input.html
 
 function userFromRecord(record) {
   return {
@@ -66,7 +66,7 @@ function createUser(username, email, password) {
           },
         },
       ])
-      .then(resolve)
+      .then((records) => resolve(userFromRecord(records[0])))
       .catch(reject);
   });
 }

@@ -30,7 +30,16 @@ router.post("/signup", (req, res) => {
       const hashedPassword = bcrypt.hashSync(password, 10);
       userController
         .createUser(username, email, hashedPassword)
-        .then(() => res.sendStatus(200))
+        .then((newUser) => {
+          req.login(newUser, (err) => {
+            if (err) {
+              res.sendStatus(500);
+              return;
+            }
+
+            res.redirect("/");
+          });
+        })
         .catch(() => res.sendStatus(400));
     })
     .catch(() => res.sendStatus(400));
