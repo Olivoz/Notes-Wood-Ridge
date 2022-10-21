@@ -5,6 +5,9 @@ var base = new Airtable({ apiKey: process.env.AIRTABLE_APIKEY }).base(
   process.env.AIRTABLE_BASE
 );
 
+const emailRegex =
+  /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/g; // Fromhttps://html.spec.whatwg.org/multipage/input.html
+
 /*
 var contacts = [];
 
@@ -34,19 +37,43 @@ function getUsers() {
 }
 */
 
-function getUser(id) {
+function userFromRecord(record) {
+  return {
+    id: record.id,
+    email: record.get("email"),
+    name: record.get("name"),
+    password: record.get("password"),
+    notes: record.get("notes"),
+  };
+}
+
+function getUser(name) {
+  return new Promise((resolve, reject) => {
+    const isEmail = emailRegex.test(name);
+    let formula = isEmail ? `email="${name}"` : `name="${name}"`;
+
+    base("UserData")
+      .select({
+        maxRecords: 2,
+        filterByFormula: formula,
+      })
+      .eachPage((records, fetchNextPage) => {
+        if (records.length != 1) {
+          resolve(null);
+          return;
+        }
+
+        resolve(userFromRecord(records[0]));
+      });
+  });
+}
+
+function getUserById(id) {
   return new Promise((resolve, reject) => {
     base("UserData")
       .find(id)
       .then((record) => {
-        const user = {
-          id: id,
-          email: record.get("email"),
-          name: record.get("name"),
-          password: record.get("password"),
-          notes: record.get("notes"),
-        };
-        resolve(user);
+        resolve(userFromRecord(record));
       })
       .catch((err) => reject(err));
   });
@@ -92,6 +119,7 @@ function deleteUser(user) {
 
 module.exports = {
   getUser,
+  getUserById,
   createUser,
   updateUser,
   createUser,
