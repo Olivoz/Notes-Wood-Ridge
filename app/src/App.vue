@@ -5,6 +5,12 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 
 const sidebarItems = [
   {
+    name: "My Notes",
+    onclick: (router) => {
+      router.push({ path: "/" });
+    },
+  },
+  {
     name: "Toggle Dark Mode",
     onclick: themeSwitch,
   },
@@ -14,9 +20,12 @@ const sidebarItems = [
       router.push({ path: "/trash" });
     },
   },
-  { name: "Login", onclick: (router) => {
+  {
+    name: "Login",
+    onclick: (router) => {
       router.push({ path: "/login" });
-    }, },
+    },
+  },
 ];
 
 const userTheme = localStorage.getItem("theme");
