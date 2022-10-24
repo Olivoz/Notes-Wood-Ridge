@@ -3,6 +3,7 @@ import { RouterView } from "vue-router";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { useAuthStore } from "./stores/AuthStore";
+import CookiesModal from "./components/CookiesModal.vue";
 
 const sidebarItems = [
   {
@@ -184,6 +185,7 @@ export default {
       </header>
       <main class="flex-grow overflow-auto px-4">
         <RouterView />
+        <CookiesModal />
       </main>
     </div>
   </div>

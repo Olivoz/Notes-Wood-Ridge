@@ -21,13 +21,17 @@ function saveNote(router) {
 </script>
 
 <template>
-  <input type="text" id="title" />
+  <input
+    type="text"
+    id="title"
+    class="mt-2 text-center text-black rounded-xl dark:bg-black border dark:border dark:text-white flex w-full justify-between font-semibold py-2 px-6"
+  />
   <textarea
     name="editNotes"
     id="editNotes"
     cols="30"
     rows="2"
-    class="resize-none h-full w-full p-8 outline-none dark:bg-black"
+    class="mt-12 resize-none h-3/4 w-full p-8 outline-none dark:bg-black overflow-x-auto scroll-smooth scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-200 dark:scrollbar-thumb-zinc-700 dark:scrollbar-track-zinc-800"
   ></textarea>
   <RoundButton @click="saveNote($router)"><CheckIcon /></RoundButton>
 </template>
