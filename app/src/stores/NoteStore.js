@@ -1,27 +1,92 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { useAuthStore } from "./AuthStore";
+
+function getArrayFromStorage(name) {
+  let arr = localStorage.getItem(name);
+  if (!arr) arr = [];
+  else arr = JSON.parse(arr);
+  return arr;
+}
+
+function findAvailableNotes() {
+  const authStore = useAuthStore();
+  if (authStore.user) {
+    return authStore.user.notes.length;
+  }
+
+  return getArrayFromStorage("notes").length;
+}
+
+function findAvailableTrash() {
+  const authStore = useAuthStore();
+  if (authStore.user) {
+    return authStore.user.trash.length;
+  }
+
+  return getArrayFromStorage("trash").length;
+}
 
 export const useNoteStore = defineStore("noteStore", {
   state: () => ({
-    notes: [
-      {
-        id: "testID",
-        owner: "ownerID",
-        title: "testTitle",
-        content:
-          "Tempor ut reprehenderit aute irure proident exercitation. Adipisicing cillum velit reprehenderit irure. Nisi ipsum ex reprehenderit ut culpa sit.",
-      },
-    ],
+    availableNotes: findAvailableNotes(),
+    availableTrash: findAvailableTrash(),
+    notes: [],
     trash: [],
   }),
   actions: {
+    loadNotes() {
+      const authStore = useAuthStore();
+      if (authStore.user) {
+        return;
+      }
+
+      const storedNotes = getArrayFromStorage("notes");
+      this.notes = storedNotes.slice(0, this.notes.length + 4);
+    },
+    loadTrash() {
+      const authStore = useAuthStore();
+      if (authStore.user) {
+        return;
+      }
+      const storedTrash = getArrayFromStorage("trash");
+      this.trash = storedTrash.slice(0, this.trash.length + 4);
+    },
     saveNote(note) {
-      this.notes.push(note);
-      axios.post("/api/v1/note/new", note).then(console.log).catch(console.log);
+      const authStore = useAuthStore();
+      if (authStore.user) {
+        axios
+          .post("/api/v1/note/new", note)
+          .then(() => this.notes.unshift(note))
+          .catch(console.log);
+        return;
+      }
+
+      this.notes.unshift(note);
+      this.availableNotes++;
+
+      const storedNotes = getArrayFromStorage("notes");
+      storedNotes.unshift(note);
+      localStorage.setItem("notes", JSON.stringify(storedNotes));
     },
     moveToTrash(note) {
+      const authStore = useAuthStore();
+      if (authStore.user) {
+        return;
+      }
+
       this.notes.splice(this.notes.indexOf(note), 1);
-      this.trash.push(note);
+      this.trash.unshift(note);
+      this.availableNotes--;
+      this.availableTrash++;
+
+      let storedNotes = getArrayFromStorage("notes");
+      storedNotes = storedNotes.filter((i) => i.id !== note.id);
+      localStorage.setItem("notes", JSON.stringify(storedNotes));
+
+      const storedTrash = getArrayFromStorage("trash");
+      storedTrash.unshift(note);
+      localStorage.setItem("trash", JSON.stringify(storedTrash));
     },
   },
 });

@@ -6,6 +6,7 @@ import CookiesModal from "../components/CookiesModal.vue";
 import { PlusIcon } from "@heroicons/vue/24/outline";
 import { useNoteStore } from "../stores/NoteStore";
 const noteStore = useNoteStore();
+noteStore.loadNotes();
 </script>
 
 <script>
@@ -44,6 +45,13 @@ let toDelete;
     :note="note"
     ><h1 class="font-semibold">{{ note.title }}</h1></NoteCard
   >
+
+  <button
+    v-if="noteStore.notes.length < noteStore.availableNotes"
+    @click="noteStore.loadNotes"
+  >
+    More
+  </button>
 
   <DeleteModal
     :open="deleteOpen"
