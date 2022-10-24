@@ -14,7 +14,9 @@ const sidebarItems = [
       router.push({ path: "/trash" });
     },
   },
-  { name: "Login", onclick: () => {} },
+  { name: "Login", onclick: (router) => {
+      router.push({ path: "/login" });
+    }, },
 ];
 
 const userTheme = localStorage.getItem("theme");
