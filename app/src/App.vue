@@ -4,6 +4,8 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { useAuthStore } from "./stores/AuthStore";
 
+useAuthStore().checkLoggedIn();
+
 const sidebarItems = [
   {
     name: "My Notes",

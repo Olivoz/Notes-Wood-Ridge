@@ -35,6 +35,12 @@ export const useNoteStore = defineStore("noteStore", {
     trash: [],
   }),
   actions: {
+    clear() {
+      this.availableNotes = findAvailableNotes();
+      this.availableTrash = findAvailableTrash();
+      this.notes = [];
+      this.trash = [];
+    },
     loadNotes() {
       const authStore = useAuthStore();
       if (authStore.user) {

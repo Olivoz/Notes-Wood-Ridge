@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { useNoteStore } from "./NoteStore";
 
 export const useAuthStore = defineStore({
   id: "auth",
@@ -7,9 +8,17 @@ export const useAuthStore = defineStore({
     user: null,
   }),
   actions: {
+    checkLoggedIn() {
+      axios
+        .get("/api/v1/user")
+        .then((res) => {
+          this.user = res.data;
+          useNoteStore().clear();
+        })
+        .catch(() => {});
+    },
     login(username, password, callback) {
-      const store = this;
-      if (store.user) return;
+      if (this.user) return;
 
       axios
         .post("/auth/login", {
@@ -17,7 +26,8 @@ export const useAuthStore = defineStore({
           password: password,
         })
         .then((res) => {
-          store.user = res;
+          this.user = res.data;
+          useNoteStore().clear();
         })
         .then(callback)
         .catch(console.log);
