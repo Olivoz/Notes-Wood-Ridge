@@ -3,18 +3,46 @@ const userController = require("../controllers/user.controller");
 const express = require("express");
 const router = express.Router();
 
-router.get("/notes", (req, res) => {
-  if (!req.user) {
+router.get("/notes/:start", (req, res) => {
+  const user = req.user;
+  if (!user) {
     res.sendStatus(401);
   }
 
-  res.send(req.user.notes);
+  const start = req.params.start;
+  const notes = user.notes.slice(start, start + 4);
+
+  switch (notes.length) {
+    case 0:
+      res.send([]);
+      break;
+
+    case 1:
+      noteController
+        .getNote(notes[0])
+        .then((note) => res.send([note]))
+        .catch((err) => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+      break;
+
+    default:
+      noteController
+        .getNotes(notes)
+        .then((notes) => res.send(notes))
+        .catch((err) => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+      break;
+  }
 });
 
-router.get("/:noteId", (req, res) => {
+router.get("/note/:noteId", (req, res) => {
   const user = req.user;
   const noteId = req.params.noteId;
-  if (!user || !user.notes.contains(noteId)) {
+  if (!user || !user.notes.includes(noteId)) {
     res.sendStatus(401);
     return;
   }
@@ -25,10 +53,10 @@ router.get("/:noteId", (req, res) => {
     .catch(() => res.sendStatus(500));
 });
 
-router.post("/:noteId", (req, res) => {
+router.post("/note/:noteId", (req, res) => {
   const user = req.user;
   const noteId = req.params.noteId;
-  if (!user || !user.notes.contains(noteId)) {
+  if (!user || !user.notes.includes(noteId)) {
     res.sendStatus(401);
     return;
   }
@@ -49,10 +77,10 @@ router.post("/:noteId", (req, res) => {
     .catch(() => res.sendStatus(500));
 });
 
-router.delete("/:noteId", (req, res) => {
+router.delete("/note/:noteId", (req, res) => {
   const user = req.user;
   const noteId = req.params.noteId;
-  if (!user || !user.notes.contains(noteId)) {
+  if (!user || !user.notes.includes(noteId)) {
     res.sendStatus(401);
     return;
   }
@@ -87,14 +115,16 @@ router.post("/new", (req, res) => {
     .createNote(user, note)
     .then(() => {
       res.sendStatus(200);
-      user.notes.push(note);
       userController
         .updateUser(user.id, {
-          notes: user.notes,
+          notes: JSON.stringify(user.notes),
         })
         .catch(console.log);
     })
-    .catch(() => res.sendStatus(500));
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 });
 
 module.exports = router;

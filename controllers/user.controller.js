@@ -14,8 +14,8 @@ function userFromRecord(record) {
     email: record.get("email"),
     name: record.get("name"),
     password: record.get("password"),
-    notes: record.get("notes"),
-    trash: record.get("trash"),
+    notes: JSON.parse(record.get("notes")),
+    trash: JSON.parse(record.get("trash")),
   };
 }
 

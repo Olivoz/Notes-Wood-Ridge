@@ -4,7 +4,7 @@ import RoundButton from "../components/RoundButton.vue";
 import { TrashIcon } from "@heroicons/vue/24/outline";
 import { useNoteStore } from "../stores/NoteStore";
 const noteStore = useNoteStore();
-noteStore.loadTrash();
+if (noteStore.trash.length == 0) noteStore.loadTrash();
 </script>
 
 <template>

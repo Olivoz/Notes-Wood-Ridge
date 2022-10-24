@@ -1,3 +1,10 @@
+require("dotenv").config();
+
+const Airtable = require("airtable");
+var base = new Airtable({ apiKey: process.env.AIRTABLE_APIKEY }).base(
+  process.env.AIRTABLE_BASE
+);
+
 function getNote(id) {
   return new Promise((resolve, reject) => {
     base("Notes")
@@ -15,6 +22,30 @@ function getNote(id) {
   });
 }
 
+function getNotes(ids) {
+  return new Promise((resolve, reject) => {
+    const filter = ids.map((id) => `RECORD_ID()="${id}"`).join(",");
+
+    base("Notes")
+      .select({
+        maxRecords: ids.length,
+        filterByFormula: `OR(${filter})`,
+      })
+      .eachPage((records, fetchNextPage) => {
+        const notes = records.map((record) => {
+          return {
+            id: record.id,
+            owner: record.get("owner"),
+            title: record.get("title"),
+            content: record.get("content"),
+          };
+        });
+        resolve(notes);
+      })
+      .catch(reject);
+  });
+}
+
 function createNote(user, note) {
   return new Promise((resolve, reject) => {
     base("Notes")
@@ -27,8 +58,9 @@ function createNote(user, note) {
           },
         },
       ])
-      .then((noteId) => {
-        user.notes.push(noteId);
+      .then((records) => {
+        const noteId = records[0].id;
+        user.notes.unshift(noteId);
         base("UserData")
           .update([
             {
@@ -69,6 +101,7 @@ function deleteNotes(notes) {
 
 module.exports = {
   getNote,
+  getNotes,
   createNote,
   updateNote,
   createNote,

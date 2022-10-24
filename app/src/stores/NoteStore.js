@@ -38,15 +38,15 @@ export const useNoteStore = defineStore("noteStore", {
     clear() {
       this.availableNotes = findAvailableNotes();
       this.availableTrash = findAvailableTrash();
-      this.notes = [];
-      this.trash = [];
+      this.notes.length = 0;
+      this.trash.length = 0;
     },
     loadNotes() {
       const authStore = useAuthStore();
       if (authStore.user) {
         axios
-          .get("/api/v1/note/notes")
-          .then((res) => (this.notes = res))
+          .get(`/api/v1/note/notes/${Math.max(this.notes.length - 1, 0)}`)
+          .then((res) => (this.notes = res.data))
           .catch(console.log);
         return;
       }
@@ -68,7 +68,9 @@ export const useNoteStore = defineStore("noteStore", {
         axios
           .post("/api/v1/note/new", note)
           .then(() => this.notes.unshift(note))
-          .catch(console.log);
+          .catch((err) => {
+            console.log(err.message);
+          });
         return;
       }
 
