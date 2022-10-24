@@ -38,6 +38,10 @@ export const useNoteStore = defineStore("noteStore", {
     loadNotes() {
       const authStore = useAuthStore();
       if (authStore.user) {
+        axios
+          .get("/api/v1/note/notes")
+          .then((res) => (this.notes = res))
+          .catch(console.log);
         return;
       }
 
