@@ -1,4 +1,7 @@
 <script>
+import axios from "axios";
+import { router } from "vue-router";
+
 export default {
   name: "Login",
   data() {
@@ -9,7 +12,12 @@ export default {
   },
   methods: {
     login() {
-      console.log("logging in");
+      axios
+        .post("/auth/login", { username: this.email, password: this.password })
+        .then(() => {
+          router.push({ path: "/" });
+        })
+        .catch(console.log);
     },
   },
 };
@@ -19,6 +27,7 @@ export default {
   <div class="flex justify-center items-center mt-20">
     <div class="w-full max-w-xs">
       <form
+        @submit.prevent="login"
         class="bg-slate-200 dark:bg-zinc-800 shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         <div class="identity-input mb-4">
