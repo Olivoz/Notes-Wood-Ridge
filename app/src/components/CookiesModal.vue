@@ -1,5 +1,6 @@
 <script setup>
 function close() {
+  localStorage.setItem("cookiePopup", true);
   document.getElementById("cookieAccept").remove();
 }
 </script>

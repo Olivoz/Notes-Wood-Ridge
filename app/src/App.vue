@@ -31,6 +31,7 @@ const sidebarItems = [
 ];
 
 const userTheme = localStorage.getItem("theme");
+const userCookies = localStorage.getItem("cookies");
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 const themeCheck = () => {
@@ -51,6 +52,11 @@ function themeSwitch() {
   }
   documentElement.classList.add("dark");
   localStorage.setItem("theme", "dark");
+}
+
+function showCookiePopup() {
+  const cookiePopup = localStorage.getItem("cookiePopup");
+  return !Boolean(cookiePopup);
 }
 </script>
 
@@ -185,7 +191,7 @@ export default {
       </header>
       <main class="flex-grow overflow-auto px-4">
         <RouterView />
-        <CookiesModal />
+        <CookiesModal v-if="showCookiePopup()" />
       </main>
     </div>
   </div>
