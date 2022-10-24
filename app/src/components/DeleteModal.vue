@@ -27,7 +27,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-zinc-600"
+              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-zinc-800"
             >
               <DialogTitle
                 as="h3"
@@ -44,7 +44,7 @@
               <div class="mt-4">
                 <button
                   type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-white text-sm font-medium hover:bg-red-200"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-red-600 dark:hover:bg-red-800 px-4 py-2 text-white text-sm font-medium hover:bg-red-200"
                   @click="confirmButton"
                 >
                   {{ buttonText }}
