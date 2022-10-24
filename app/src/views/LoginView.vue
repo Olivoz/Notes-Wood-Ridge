@@ -80,13 +80,12 @@ export default {
           </a>
         </div>
         <p class="inline-block align-baseline text-sm">Dont have an account?</p>
-        <a
+        <button
           class="inline-block align-baseline font-bold text-sm hover:text-slate-500 mt-6 mx-2"
-          href="#"
           @click="$router.push({ path: '/register' })"
         >
           Register here.
-        </a>
+        </button>
       </form>
     </div>
   </div>

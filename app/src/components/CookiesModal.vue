@@ -17,9 +17,12 @@
         >We use cookies to provide a better user experience.</span
       >
       <div class="flex items-center justify-between">
-        <a class="text-xs mr-1 text-slate-800 hover:text-gray-500" href="*"
-          >Privacy Policy</a
+        <button
+          class="text-xs mr-1 text-slate-800 hover:text-gray-500"
+          @click="this.$router.push({ path: '/policy' })"
         >
+          Privacy Policy
+        </button>
         <div class="w-1/2">
           <button
             type="button"
