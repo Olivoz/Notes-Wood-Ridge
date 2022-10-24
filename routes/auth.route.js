@@ -48,4 +48,14 @@ router.post("/signup", (req, res) => {
     .catch(() => res.sendStatus(400));
 });
 
+router.post("/logout", (req, res) => {
+  const user = req.user;
+  if (!user) {
+    res.sendStatus(401);
+    return;
+  }
+
+  req.logout(() => res.sendStatus(200));
+});
+
 module.exports = router;
