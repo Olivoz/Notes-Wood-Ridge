@@ -63,7 +63,7 @@ router.delete("/:noteId", (req, res) => {
     .catch(() => res.sendStatus(500));
 });
 
-router.delete("/new", (req, res) => {
+router.post("/new", (req, res) => {
   const user = req.user;
   if (!user) {
     res.sendStatus(401);
