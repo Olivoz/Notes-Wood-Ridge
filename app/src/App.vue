@@ -2,6 +2,7 @@
 import { RouterView } from "vue-router";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
+import { useAuthStore } from "./stores/AuthStore";
 
 const sidebarItems = [
   {
@@ -62,6 +63,11 @@ export default {
   computed: {
     currentRouteName() {
       return this.$route.name;
+    },
+    displayedSidebarItems() {
+      const authStore = useAuthStore();
+      if (authStore.user) sidebarItems.filter((i) => i.name == "Login");
+      return sidebarItems;
     },
   },
 };
