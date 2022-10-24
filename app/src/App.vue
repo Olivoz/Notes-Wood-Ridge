@@ -3,6 +3,7 @@ import { RouterView } from "vue-router";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { useAuthStore } from "./stores/AuthStore";
+import CookiesModal from "./components/CookiesModal.vue";
 
 useAuthStore().checkLoggedIn();
 
@@ -32,6 +33,7 @@ const sidebarItems = [
 ];
 
 const userTheme = localStorage.getItem("theme");
+const userCookies = localStorage.getItem("cookies");
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 const themeCheck = () => {
@@ -52,6 +54,11 @@ function themeSwitch() {
   }
   documentElement.classList.add("dark");
   localStorage.setItem("theme", "dark");
+}
+
+function showCookiePopup() {
+  const cookiePopup = localStorage.getItem("cookiePopup");
+  return !Boolean(cookiePopup);
 }
 </script>
 
@@ -186,6 +193,7 @@ export default {
       </header>
       <main class="flex-grow overflow-auto px-4">
         <RouterView />
+        <CookiesModal v-if="showCookiePopup()" />
       </main>
     </div>
   </div>

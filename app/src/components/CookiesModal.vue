@@ -1,11 +1,15 @@
 <script setup>
 function close() {
+  localStorage.setItem("cookiePopup", true);
   document.getElementById("cookieAccept").remove();
 }
 </script>
 
 <template>
-  <div class="container mx-auto px-20 justify-center flex" id="cookieAccept">
+  <div
+    class="container mx-auto px-20 justify-center flex z-40"
+    id="cookieAccept"
+  >
     <div
       class="absolute bg-slate-200 dark:bg-zinc-800 rounded-xl shadow-md p-6 bottom-4 text-center"
       style="cursor: auto"
