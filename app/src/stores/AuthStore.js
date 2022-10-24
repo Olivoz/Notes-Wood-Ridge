@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import router from "vue-router";
 
 export const useAuthStore = defineStore({
   id: "auth",
@@ -8,7 +7,7 @@ export const useAuthStore = defineStore({
     user: null,
   }),
   actions: {
-    login(username, password) {
+    login(username, password, callback) {
       const store = this;
       if (store.user) return;
 
@@ -19,13 +18,13 @@ export const useAuthStore = defineStore({
         })
         .then((res) => {
           store.user = res;
-          router.push({ path: "/" });
         })
+        .then(callback)
         .catch(console.log);
     },
-    logout() {
+    logout(callback) {
       this.user = null;
-      router.push({ path: "/login" });
+      callback();
       axios.post("/auth/logout").catch(console.log);
     },
   },

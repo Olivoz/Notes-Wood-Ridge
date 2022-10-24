@@ -12,7 +12,10 @@ export default {
   methods: {
     login() {
       const authStore = useAuthStore();
-      authStore.login(this.email, this.password);
+      const router = this.$router;
+      authStore.login(this.email, this.password, () => {
+        router.push({ path: "/" });
+      });
     },
   },
 };
