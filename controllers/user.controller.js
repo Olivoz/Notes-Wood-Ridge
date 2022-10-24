@@ -15,6 +15,7 @@ function userFromRecord(record) {
     name: record.get("name"),
     password: record.get("password"),
     notes: record.get("notes"),
+    trash: record.get("trash"),
   };
 }
 
@@ -63,6 +64,7 @@ function createUser(username, email, password) {
             name: username,
             password: password,
             notes: JSON.stringify([]),
+            trash: JSON.stringify([]),
           },
         },
       ])
@@ -85,6 +87,7 @@ function deleteUser(user) {
     getUser(user.id)
       .then((user) => {
         user.notes.forEach(deleteNote); // Use a deleteNotes to prevent rate limit?
+        user.trash.forEach(deleteNote);
       })
       .then(() => {
         base("UserData").destroy(user.id).then(resolve).catch(reject);
