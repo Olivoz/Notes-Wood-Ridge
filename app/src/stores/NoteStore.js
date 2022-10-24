@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import axios from "axios";
 
 export const useNoteStore = defineStore("noteStore", {
   state: () => ({
@@ -16,6 +17,7 @@ export const useNoteStore = defineStore("noteStore", {
   actions: {
     saveNote(note) {
       this.notes.push(note);
+      axios.post("/api/v1/note/new", note).then(console.log).catch(console.log);
     },
     moveToTrash(note) {
       this.notes.splice(this.notes.indexOf(note), 1);
