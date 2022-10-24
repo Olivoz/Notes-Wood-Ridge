@@ -1,6 +1,5 @@
 <script>
-import axios from "axios";
-import { router } from "vue-router";
+import { useAuthStore } from "../stores/AuthStore";
 
 export default {
   name: "Login",
@@ -12,12 +11,8 @@ export default {
   },
   methods: {
     login() {
-      axios
-        .post("/auth/login", { username: this.email, password: this.password })
-        .then(() => {
-          router.push({ path: "/" });
-        })
-        .catch(console.log);
+      const authStore = useAuthStore();
+      authStore.login(this.email, this.password);
     },
   },
 };
