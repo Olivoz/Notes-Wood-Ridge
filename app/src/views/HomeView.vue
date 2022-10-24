@@ -2,6 +2,7 @@
 import NoteCard from "../components/NoteCard.vue";
 import DeleteModal from "../components/DeleteModal.vue";
 import RoundButton from "../components/RoundButton.vue";
+import CookiesModal from "../components/CookiesModal.vue";
 import { PlusIcon } from "@heroicons/vue/24/outline";
 import { useNoteStore } from "../stores/NoteStore";
 const noteStore = useNoteStore();
@@ -56,4 +57,6 @@ let toDelete;
   <RoundButton @click="$router.push({ path: '/edit' })"
     ><PlusIcon
   /></RoundButton>
+
+  <CookiesModal></CookiesModal>
 </template>

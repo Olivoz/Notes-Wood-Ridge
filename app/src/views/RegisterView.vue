@@ -9,7 +9,7 @@ export default {
   },
   methods: {
     login() {
-      console.log("logging in");
+      console.log("registering account");
     },
   },
 };
@@ -19,7 +19,7 @@ export default {
   <div class="flex justify-center items-center mt-20">
     <div class="w-full max-w-xs">
       <form
-        class="bg-slate-200 dark:bg-zinc-800 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        class="bg-slate-200 dark:bg-zinc-800 shadow-md rounded-xl px-8 pt-6 pb-8 mb-4"
       >
         <div class="identity-input mb-4">
           <label
@@ -30,7 +30,7 @@ export default {
           >
           <input
             id="identity"
-            class="shadow appearance-none borderrounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            class="dark:bg-zinc-600 dark:text-white shadow appearance-none borderrounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="Email"
             aria-describedby="emailHelp"
@@ -48,7 +48,7 @@ export default {
           >
           <input
             id="identity"
-            class="shadow appearance-none borderrounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            class="dark:bg-zinc-600 dark:text-white shadow appearance-none borderrounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="Username"
             aria-describedby="usernameHelp"
@@ -67,7 +67,7 @@ export default {
           <input
             aria-describedby="passwordHelp"
             v-model="password"
-            class="shadow appearance-none borderrounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            class="dark:bg-zinc-600 dark:text-white shadow appearance-none borderrounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"
             placeholder="*******"
@@ -78,7 +78,7 @@ export default {
 
         <div class="flex items-center justify-between">
           <button
-            class="bg-white hover:bg-slate-300 dark:text-black dark:hover:bg-zinc-700 dark:hover:text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            class="bg-white hover:bg-slate-300 dark:bg-zinc-600 dark:hover:bg-zinc-500 dark:hover:text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
             Register
