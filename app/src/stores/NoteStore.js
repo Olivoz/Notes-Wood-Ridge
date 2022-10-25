@@ -27,6 +27,33 @@ function findAvailableTrash() {
   return getArrayFromStorage("trash").length;
 }
 
+function addNote(target, note, store, isTrash) {
+  target.unshift(note);
+
+  if (isTrash) store.availableTrash++;
+  else store.availableNotes++;
+
+  if (useAuthStore().user) return;
+
+  const targetName = isTrash ? "trash" : "notes";
+  const stored = getArrayFromStorage(targetName);
+  stored.unshift(note);
+  localStorage.setItem(targetName, JSON.stringify(stored));
+}
+
+function removeNote(target, note, store, isTrash) {
+  target.splice(target.indexOf(note), 1);
+
+  if (isTrash) store.availableTrash--;
+  else store.availableNotes--;
+
+  if (useAuthStore().user) return;
+
+  const targetName = isTrash ? "trash" : "notes";
+  const stored = getArrayFromStorage(targetName).filter((n) => n.id != note.id);
+  localStorage.setItem(targetName, JSON.stringify(stored));
+}
+
 export const useNoteStore = defineStore("noteStore", {
   state: () => ({
     availableNotes: findAvailableNotes(),
@@ -71,29 +98,18 @@ export const useNoteStore = defineStore("noteStore", {
       if (authStore.user) {
         axios
           .post("/api/v1/note/new", note)
-          .then((res) => {
-            this.notes.unshift(res.data);
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
+          .then((res) => addNote(this.notes, res.data))
+          .catch((err) => console.log(err.message));
         return;
       }
 
       note.id = Date.now();
       note.owner = "local";
-      this.notes.unshift(note);
-      this.availableNotes++;
-
-      const storedNotes = getArrayFromStorage("notes");
-      storedNotes.unshift(note);
-      localStorage.setItem("notes", JSON.stringify(storedNotes));
+      addNote(this.notes, note, this);
     },
     moveToTrash(note) {
-      this.notes.splice(this.notes.indexOf(note), 1);
-      this.trash.unshift(note);
-      this.availableNotes--;
-      this.availableTrash++;
+      removeNote(this.notes, note, this);
+      addNote(this.trash, note, this, true);
 
       const authStore = useAuthStore();
       if (authStore.user) {
@@ -109,27 +125,14 @@ export const useNoteStore = defineStore("noteStore", {
           });
         return;
       }
-
-      const storedNotes = getArrayFromStorage("notes");
-      storedNotes.splice(storedNotes.indexOf(note), 1);
-      localStorage.setItem("notes", JSON.stringify(storedNotes));
-
-      const storedTrash = getArrayFromStorage("trash");
-      storedTrash.unshift(note);
-      localStorage.setItem("trash", JSON.stringify(storedTrash));
     },
     deleteNote(note) {
+      removeNote(this.trash, note, this, true);
+
       const authStore = useAuthStore();
       if (authStore.user) {
         return;
       }
-
-      this.trash.splice(this.trash.indexOf(note), 1);
-      this.availableTrash--;
-
-      const storedTrash = getArrayFromStorage("trash");
-      storedTrash.splice(storedTrash.indexOf(note), 1);
-      localStorage.setItem("trash", JSON.stringify(storedTrash));
     },
   },
 });
