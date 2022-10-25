@@ -11,8 +11,6 @@ function saveNote(router) {
   const editNotes = document.getElementById("editNotes");
   if (titleInput.value.length <= 0 || editNotes.value.length <= 0) return;
   noteStore.saveNote({
-    id: `${Math.random()}`,
-    owner: "placeholderOwner",
     title: titleInput.value,
     content: editNotes.value,
   });

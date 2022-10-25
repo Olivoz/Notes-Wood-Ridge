@@ -86,7 +86,7 @@ router.delete("/note/:noteId", (req, res) => {
   }
 
   noteController
-    .deleteNote(noteId)
+    .deleteNote(user, noteId)
     .then(() => res.sendStatus(200))
     .catch(() => res.sendStatus(500));
 });
@@ -113,8 +113,8 @@ router.post("/new", (req, res) => {
 
   noteController
     .createNote(user, note)
-    .then(() => {
-      res.sendStatus(200);
+    .then((note) => {
+      res.send(note);
       userController
         .updateUser(user.id, {
           notes: JSON.stringify(user.notes),
@@ -125,6 +125,70 @@ router.post("/new", (req, res) => {
       console.log(err);
       res.sendStatus(500);
     });
+});
+
+router.post("/trash", (req, res) => {
+  const user = req.user;
+  if (!user) {
+    res.sendStatus(401);
+    return;
+  }
+
+  const noteId = req.body.id;
+
+  if (!noteId) {
+    res.sendStatus(400);
+    return;
+  }
+
+  if (!user.notes.includes(noteId)) {
+    res.sendStatus(401);
+    return;
+  }
+
+  noteController
+    .trashNote(user, noteId)
+    .then(() => res.sendStatus(200))
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+});
+
+router.get("/trash/:start", (req, res) => {
+  const user = req.user;
+  if (!user) {
+    res.sendStatus(401);
+  }
+
+  const start = req.params.start;
+  const notes = user.trash.slice(start, start + 4);
+
+  switch (notes.length) {
+    case 0:
+      res.send([]);
+      break;
+
+    case 1:
+      noteController
+        .getNote(notes[0])
+        .then((note) => res.send([note]))
+        .catch((err) => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+      break;
+
+    default:
+      noteController
+        .getNotes(notes)
+        .then((notes) => res.send(notes))
+        .catch((err) => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+      break;
+  }
 });
 
 module.exports = router;

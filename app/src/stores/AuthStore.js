@@ -13,7 +13,10 @@ export const useAuthStore = defineStore({
         .get("/api/v1/user")
         .then((res) => {
           this.user = res.data;
-          useNoteStore().clear();
+          const noteStore = useNoteStore();
+          noteStore.clear();
+          noteStore.loadNotes();
+          noteStore.loadTrash();
         })
         .catch(() => {});
     },

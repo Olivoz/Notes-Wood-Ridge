@@ -57,6 +57,10 @@ export const useNoteStore = defineStore("noteStore", {
     loadTrash() {
       const authStore = useAuthStore();
       if (authStore.user) {
+        axios
+          .get(`/api/v1/note/trash/${Math.max(this.trash.length - 1, 0)}`)
+          .then((res) => (this.trash = res.data))
+          .catch(console.log);
         return;
       }
       const storedTrash = getArrayFromStorage("trash");
@@ -67,13 +71,17 @@ export const useNoteStore = defineStore("noteStore", {
       if (authStore.user) {
         axios
           .post("/api/v1/note/new", note)
-          .then(() => this.notes.unshift(note))
+          .then((res) => {
+            this.notes.unshift(res.data);
+          })
           .catch((err) => {
             console.log(err.message);
           });
         return;
       }
 
+      note.id = Date.now();
+      note.owner = "local";
       this.notes.unshift(note);
       this.availableNotes++;
 
@@ -84,6 +92,19 @@ export const useNoteStore = defineStore("noteStore", {
     moveToTrash(note) {
       const authStore = useAuthStore();
       if (authStore.user) {
+        axios
+          .post("/api/v1/note/trash", {
+            id: note.id,
+          })
+          .then(() => {
+            this.notes.splice(this.notes.indexOf(note), 1);
+            this.trash.unshift(note);
+            this.availableNotes--;
+            this.availableTrash++;
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
         return;
       }
 

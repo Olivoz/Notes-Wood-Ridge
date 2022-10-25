@@ -5,6 +5,15 @@ var base = new Airtable({ apiKey: process.env.AIRTABLE_APIKEY }).base(
   process.env.AIRTABLE_BASE
 );
 
+function noteFromRecord(record) {
+  return {
+    id: record.id,
+    owner: record.get("owner"),
+    title: record.get("title"),
+    content: record.get("content"),
+  };
+}
+
 function getNote(id) {
   return new Promise((resolve, reject) => {
     base("Notes")
@@ -32,14 +41,7 @@ function getNotes(ids) {
         filterByFormula: `OR(${filter})`,
       })
       .eachPage((records, fetchNextPage) => {
-        const notes = records.map((record) => {
-          return {
-            id: record.id,
-            owner: record.get("owner"),
-            title: record.get("title"),
-            content: record.get("content"),
-          };
-        });
+        const notes = records.map(noteFromRecord);
         resolve(notes);
       })
       .catch(reject);
@@ -70,7 +72,7 @@ function createNote(user, note) {
               },
             },
           ])
-          .then(() => resolve(noteId))
+          .then(() => resolve(noteFromRecord(records[0])))
           .catch((err) => reject(err));
       })
       .catch((err) => reject(err));
@@ -86,17 +88,53 @@ function updateNote(id, change) {
   ]);
 }
 
-function deleteNote(note) {
-  deleteNotes([note]);
+function deleteNote(user, noteId) {
+  return deleteNotes(user, [noteId]);
 }
 
-function deleteNotes(notes) {
-  // The Airtable API has a max amount of 10 records per request. This splits the array in to usable chunks.
-  const chunkSize = 10;
-  for (let i = 0; i < notes.length; i += chunkSize) {
-    const chunk = notes.slice(i, i + chunkSize);
-    base("Notes").destroy(chunk.map((note) => note.id));
-  }
+function deleteNotes(user, noteIds) {
+  return new Promise((resolve, reject) => {
+    noteIds.forEach((noteId) => {
+      user.notes.splice(this.notes.indexOf(noteId), 1);
+      user.trash.splice(this.notes.indexOf(noteId), 1);
+    });
+
+    base("UserData")
+      .update([
+        {
+          id: user.id,
+          fields: {
+            notes: JSON.stringify(user.notes),
+            trash: JSON.stringify(user.trash),
+          },
+        },
+      ])
+      .then(async () => {
+        // The Airtable API has a max amount of 10 records per request. This splits the array in to usable chunks.
+        const chunkSize = 10;
+        for (let i = 0; i < noteIds.length; i += chunkSize) {
+          const chunk = noteIds.slice(i, i + chunkSize);
+          await base("Notes").destroy(chunk);
+        }
+
+        resolve();
+      })
+      .catch(reject);
+  });
+}
+
+function trashNote(user, noteId) {
+  user.trash.unshift(noteId);
+  user.notes.splice(user.notes.indexOf(noteId), 1);
+  return base("UserData").update([
+    {
+      id: user.id,
+      fields: {
+        notes: JSON.stringify(user.notes),
+        trash: JSON.stringify(user.trash),
+      },
+    },
+  ]);
 }
 
 module.exports = {
@@ -107,4 +145,5 @@ module.exports = {
   createNote,
   deleteNote,
   deleteNotes,
+  trashNote,
 };
