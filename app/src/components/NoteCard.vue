@@ -1,6 +1,5 @@
 <script setup>
 import { TrashIcon } from "@heroicons/vue/24/outline";
-import { ArrowUturnLeftIcon } from "@heroicons/vue/24/outline";
 </script>
 
 <script>
@@ -19,8 +18,8 @@ export default {
     >
       <p class="font-semibold">{{ note.title }}</p>
       <div class="flex justify-end">
-        <TrashIcon class="hover:text-red-500 h-6" @click="onRemove"></TrashIcon>
-        <ArrowUturnLeftIcon class="h-6" @click="back"></ArrowUturnLeftIcon>
+        <TrashIcon class="hover:text-red-500 h-6" @click="onRemove" />
+        <slot />
       </div>
     </button>
   </div>
