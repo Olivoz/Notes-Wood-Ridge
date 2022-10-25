@@ -25,6 +25,7 @@ app.use(
     cookie: {
       secure: false, // We are not using HTTPS so we cannot use secure cookies.
       maxAge: 60 * 60 * 1000, // 1 hours in ms
+      sameSite: "strict",
     },
     store: store,
   })
