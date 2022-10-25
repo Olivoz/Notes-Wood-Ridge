@@ -46,7 +46,7 @@ export const useNoteStore = defineStore("noteStore", {
       if (authStore.user) {
         axios
           .get(`/api/v1/note/notes/${Math.max(this.notes.length - 1, 0)}`)
-          .then((res) => (this.notes = res.data))
+          .then((res) => res.data.forEach((note) => this.notes.push(note)))
           .catch(console.log);
         return;
       }
@@ -59,7 +59,7 @@ export const useNoteStore = defineStore("noteStore", {
       if (authStore.user) {
         axios
           .get(`/api/v1/note/trash/${Math.max(this.trash.length - 1, 0)}`)
-          .then((res) => (this.trash = res.data))
+          .then((res) => res.data.forEach((note) => this.trash.push(note)))
           .catch(console.log);
         return;
       }
