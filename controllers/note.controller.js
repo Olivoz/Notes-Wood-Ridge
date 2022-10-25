@@ -39,15 +39,10 @@ function getNotes(ids) {
       .select({
         maxRecords: ids.length,
         filterByFormula: `OR(${filter})`,
-        sort: [
-          {
-            field: "Last Modified",
-            direction: "desc",
-          },
-        ],
       })
       .eachPage((records, fetchNextPage) => {
         const notes = records.map(noteFromRecord);
+        notes.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
         resolve(notes);
       })
       .catch(reject);
