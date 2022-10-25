@@ -9,6 +9,7 @@ export const useAuthStore = defineStore({
   }),
   actions: {
     checkLoggedIn() {
+      if (!localStorage.getItem("loggedIn")) return;
       axios
         .get("/api/v1/user")
         .then((res) => {
@@ -31,6 +32,7 @@ export const useAuthStore = defineStore({
         .then((res) => {
           this.user = res.data;
           useNoteStore().clear();
+          localStorage.setItem("loggedIn", true);
         })
         .then(callback)
         .catch(console.log);
@@ -38,6 +40,7 @@ export const useAuthStore = defineStore({
     logout(callback) {
       this.user = null;
       useNoteStore().clear();
+      localStorage.removeItem("loggedIn");
       axios.post("/auth/logout").then(callback).catch(console.log);
     },
     register(username, email, password, callback) {
@@ -50,6 +53,7 @@ export const useAuthStore = defineStore({
         .then((res) => {
           this.user = res.data;
           useNoteStore().clear();
+          localStorage.setItem("loggedIn", true);
         })
         .then(callback)
         .catch(console.log);

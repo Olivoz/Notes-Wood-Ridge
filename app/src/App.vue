@@ -33,17 +33,11 @@ const sidebarItems = [
 ];
 
 const userTheme = localStorage.getItem("theme");
-const userCookies = localStorage.getItem("cookies");
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-const themeCheck = () => {
-  if (userTheme === "dark" || (!userTheme && systemTheme)) {
-    document.documentElement.classList.add("dark");
-    return;
-  }
-};
-
-themeCheck();
+if (userTheme === "dark" || (!userTheme && systemTheme)) {
+  document.documentElement.classList.add("dark");
+}
 
 function themeSwitch() {
   const documentElement = document.documentElement;
@@ -57,8 +51,7 @@ function themeSwitch() {
 }
 
 function showCookiePopup() {
-  const cookiePopup = localStorage.getItem("cookiePopup");
-  return !Boolean(cookiePopup);
+  return !localStorage.getItem("cookiePopup");
 }
 </script>
 
