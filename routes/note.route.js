@@ -42,7 +42,7 @@ router.get("/notes/:start", (req, res) => {
 router.get("/note/:noteId", (req, res) => {
   const user = req.user;
   const noteId = req.params.noteId;
-  if (!user || !user.notes.includes(noteId)) {
+  if (!user || (!user.notes.includes(noteId) && !user.trash.includes(noteId))) {
     res.sendStatus(401);
     return;
   }
@@ -80,7 +80,8 @@ router.post("/note/:noteId", (req, res) => {
 router.delete("/note/:noteId", (req, res) => {
   const user = req.user;
   const noteId = req.params.noteId;
-  if (!user || !user.notes.includes(noteId)) {
+
+  if (!user || (!user.notes.includes(noteId) && !user.trash.includes(noteId))) {
     res.sendStatus(401);
     return;
   }
@@ -88,7 +89,10 @@ router.delete("/note/:noteId", (req, res) => {
   noteController
     .deleteNote(user, noteId)
     .then(() => res.sendStatus(200))
-    .catch(() => res.sendStatus(500));
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 });
 
 router.post("/new", (req, res) => {

@@ -96,8 +96,8 @@ function deleteNote(user, noteId) {
 function deleteNotes(user, noteIds) {
   return new Promise((resolve, reject) => {
     noteIds.forEach((noteId) => {
-      user.notes.splice(this.notes.indexOf(noteId), 1);
-      user.trash.splice(this.notes.indexOf(noteId), 1);
+      user.notes.splice(user.notes.indexOf(noteId), 1);
+      user.trash.splice(user.notes.indexOf(noteId), 1);
     });
 
     base("UserData")

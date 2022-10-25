@@ -131,6 +131,12 @@ export const useNoteStore = defineStore("noteStore", {
 
       const authStore = useAuthStore();
       if (authStore.user) {
+        axios.delete(`/api/v1/note/note/${note.id}`).catch((err) => {
+          this.clear();
+          this.loadNotes();
+          this.loadTrash();
+          console.log(err.message);
+        });
         return;
       }
     },
