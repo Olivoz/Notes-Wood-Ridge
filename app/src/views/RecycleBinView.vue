@@ -12,6 +12,10 @@ const noteStore = useNoteStore();
 function deleteNote(note) {
   noteStore.deleteNote(note);
 }
+
+function back(note) {
+  noteStore.restoreNote(note);
+}
 </script>
 
 <template>
@@ -20,7 +24,7 @@ function deleteNote(note) {
     :note="note"
     :onRemove="() => deleteNote(note)"
   >
-    <ArrowUturnLeftIcon class="hover:text-green-500 h-6" @click="back" />
+    <ArrowUturnLeftIcon class="hover:text-green-500 h-6" @click="back(note)" />
   </NoteCard>
   <button
     class="hover:animate-pulse bg-slate-200 rounded-xl w-full mt-10 py-2 px-6 dark:bg-zinc-800 dark:text-white font-semibold"

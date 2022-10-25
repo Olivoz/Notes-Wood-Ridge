@@ -140,5 +140,19 @@ export const useNoteStore = defineStore("noteStore", {
         return;
       }
     },
+    restoreNote(note) {
+      removeNote(this.trash, note, this, true);
+      addNote(this.notes, note, this);
+
+      const authStore = useAuthStore();
+      if (authStore.user) {
+        axios.post("/api/v1/note/restore", { id: note.id }).catch((err) => {
+          this.clear();
+          this.loadNotes();
+          this.loadTrash();
+          console.log(err.message);
+        });
+      }
+    },
   },
 });

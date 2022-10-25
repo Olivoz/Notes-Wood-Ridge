@@ -196,4 +196,29 @@ router.get("/trash/:start", (req, res) => {
   }
 });
 
+router.post("/restore", (req, res) => {
+  const user = req.user;
+  if (!user) {
+    res.sendStatus(401);
+    return;
+  }
+
+  const noteId = req.body.id;
+  if (!noteId || !user.trash.includes(noteId)) {
+    res.sendStatus(400);
+    return;
+  }
+
+  user.trash.splice(user.trash.indexOf(noteId), 1);
+  user.notes.unshift(noteId);
+
+  userController
+    .updateUser(user.id, {
+      notes: JSON.stringify(user.notes),
+      trash: JSON.stringify(user.trash),
+    })
+    .then(() => res.sendStatus(200))
+    .catch(console.log);
+});
+
 module.exports = router;
