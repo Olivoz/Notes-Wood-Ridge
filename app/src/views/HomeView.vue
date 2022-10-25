@@ -45,7 +45,7 @@ let toDelete;
   />
 
   <button
-    class="bg-slate-200 rounded-xl w-full mt-10 py-2 px-6 dark:bg-zinc-800 dark:text-white font-semibold"
+    class="hover:animate-pulse bg-slate-200 rounded-xl w-full mt-10 py-2 px-6 dark:bg-zinc-800 dark:text-white font-semibold"
     v-if="noteStore.notes.length < noteStore.availableNotes"
     @click="noteStore.loadNotes"
   >

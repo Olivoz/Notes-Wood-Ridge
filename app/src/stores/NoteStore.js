@@ -90,35 +90,45 @@ export const useNoteStore = defineStore("noteStore", {
       localStorage.setItem("notes", JSON.stringify(storedNotes));
     },
     moveToTrash(note) {
+      this.notes.splice(this.notes.indexOf(note), 1);
+      this.trash.unshift(note);
+      this.availableNotes--;
+      this.availableTrash++;
+
       const authStore = useAuthStore();
       if (authStore.user) {
         axios
           .post("/api/v1/note/trash", {
             id: note.id,
           })
-          .then(() => {
-            this.notes.splice(this.notes.indexOf(note), 1);
-            this.trash.unshift(note);
-            this.availableNotes--;
-            this.availableTrash++;
-          })
           .catch((err) => {
+            this.clear();
+            this.loadNotes();
+            this.loadTrash();
             console.log(err.message);
           });
         return;
       }
 
-      this.notes.splice(this.notes.indexOf(note), 1);
-      this.trash.unshift(note);
-      this.availableNotes--;
-      this.availableTrash++;
-
-      let storedNotes = getArrayFromStorage("notes");
-      storedNotes = storedNotes.filter((i) => i.id !== note.id);
+      const storedNotes = getArrayFromStorage("notes");
+      storedNotes.splice(storedNotes.indexOf(note), 1);
       localStorage.setItem("notes", JSON.stringify(storedNotes));
 
       const storedTrash = getArrayFromStorage("trash");
       storedTrash.unshift(note);
+      localStorage.setItem("trash", JSON.stringify(storedTrash));
+    },
+    deleteNote(note) {
+      const authStore = useAuthStore();
+      if (authStore.user) {
+        return;
+      }
+
+      this.trash.splice(this.trash.indexOf(note), 1);
+      this.availableTrash--;
+
+      const storedTrash = getArrayFromStorage("trash");
+      storedTrash.splice(storedTrash.indexOf(note), 1);
       localStorage.setItem("trash", JSON.stringify(storedTrash));
     },
   },
