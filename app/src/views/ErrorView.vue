@@ -10,7 +10,7 @@ import { Bars3Icon, HomeIcon } from "@heroicons/vue/24/outline";
     <p class="semibold text-lg">Press the <b>home</b> button to return.</p>
     <button
       class="mt-8 rounded-xl bg-slate-200 w-16 hover:bg-slate-300 text-black dark:text-white hover:dark:bg-zinc-500 dark:bg-zinc-700"
-      @click="this.$router.push({ path: '/' })"
+      @click="$router.push({ path: '/' })"
     >
       <HomeIcon></HomeIcon>
     </button>
