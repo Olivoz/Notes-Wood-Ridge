@@ -179,6 +179,7 @@ export default {
               </MenuItem>
               <MenuItem v-slot="{ active }">
                 <a
+                  @click="useAuthStore().logout()"
                   href="#"
                   :class="[
                     active ? 'bg-gray-100 dark:bg-zinc-600' : '',
