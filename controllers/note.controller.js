@@ -39,6 +39,12 @@ function getNotes(ids) {
       .select({
         maxRecords: ids.length,
         filterByFormula: `OR(${filter})`,
+        sort: [
+          {
+            field: "Last Modified",
+            direction: "desc",
+          },
+        ],
       })
       .eachPage((records, fetchNextPage) => {
         const notes = records.map(noteFromRecord);
