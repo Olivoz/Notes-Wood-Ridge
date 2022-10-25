@@ -9,7 +9,7 @@ router.get("/notes/:start", (req, res) => {
     res.sendStatus(401);
   }
 
-  const start = req.params.start;
+  const start = Number(req.params.start);
   const notes = user.notes.slice(start, start + 4);
 
   switch (notes.length) {
@@ -166,7 +166,7 @@ router.get("/trash/:start", (req, res) => {
     return;
   }
 
-  const start = req.params.start;
+  const start = Number(req.params.start);
   const notes = user.trash.slice(start, start + 4);
 
   switch (notes.length) {
