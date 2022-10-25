@@ -41,6 +41,7 @@ let toDelete;
       }
     "
     :note="note"
+    :key="note.id"
   />
 
   <button

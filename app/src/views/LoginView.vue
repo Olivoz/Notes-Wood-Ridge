@@ -2,7 +2,6 @@
 import { useAuthStore } from "../stores/AuthStore";
 
 export default {
-  name: "Login",
   data() {
     return {
       email: "",

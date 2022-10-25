@@ -7,13 +7,12 @@ const noteStore = useNoteStore();
 </script>
 
 <script>
-const noteStore = useNoteStore();
 function deleteNote(note) {
-  noteStore.deleteNote(note);
+  useNoteStore().deleteNote(note);
 }
 
 function back(note) {
-  noteStore.restoreNote(note);
+  useNoteStore().restoreNote(note);
 }
 </script>
 
@@ -22,6 +21,7 @@ function back(note) {
     v-for="note in noteStore.trash"
     :note="note"
     :onRemove="() => deleteNote(note)"
+    :key="note.id"
   >
     <ArrowUturnLeftIcon class="hover:text-green-500 h-6" @click="back(note)" />
   </NoteCard>

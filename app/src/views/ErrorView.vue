@@ -1,5 +1,5 @@
 <script setup>
-import { Bars3Icon, HomeIcon } from "@heroicons/vue/24/outline";
+import { HomeIcon } from "@heroicons/vue/24/outline";
 </script>
 
 <template>
