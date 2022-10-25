@@ -1,75 +1,91 @@
-<script setup>
+<script>
 import { RouterView } from "vue-router";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/vue/24/outline";
-import { useAuthStore } from "./stores/AuthStore";
 import CookiesModal from "./components/CookiesModal.vue";
+import { useAuthStore } from "./stores/AuthStore";
 
-useAuthStore().checkLoggedIn();
-
-const sidebarItems = [
-  {
-    name: "My Notes",
-    onclick: (router) => {
-      router.push({ path: "/" });
-    },
-  },
-  {
-    name: "Toggle Dark Mode",
-    onclick: themeSwitch,
-  },
-  {
-    name: "Recycle Bin",
-    onclick: (router) => {
-      router.push({ path: "/trash" });
-    },
-  },
-  {
-    name: "Login",
-    onclick: (router) => {
-      router.push({ path: "/login" });
-    },
-  },
-];
-
-const userTheme = localStorage.getItem("theme");
-const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-if (userTheme === "dark" || (!userTheme && systemTheme)) {
-  document.documentElement.classList.add("dark");
-}
-
-function themeSwitch() {
-  const documentElement = document.documentElement;
-  if (documentElement.classList.contains("dark")) {
-    documentElement.classList.remove("dark");
-    localStorage.setItem("theme", "light");
-    return;
-  }
-  documentElement.classList.add("dark");
-  localStorage.setItem("theme", "dark");
-}
-
-function showCookiePopup() {
-  return !localStorage.getItem("cookiePopup");
-}
-</script>
-
-<script>
 export default {
+  components: {
+    RouterView,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    Bars3Icon,
+    XMarkIcon,
+    UserIcon,
+    CookiesModal,
+  },
   data() {
     return {
+      loggedIn: false,
       sidebarOpen: false,
     };
   },
+  created() {
+    const authStore = useAuthStore();
+    authStore.$subscribe((_, state) => {
+      this.loggedIn = Boolean(state.user);
+    });
+    authStore.checkLoggedIn();
+
+    const userTheme = localStorage.getItem("theme");
+    const systemTheme = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    if (userTheme === "dark" || (!userTheme && systemTheme)) {
+      document.documentElement.classList.add("dark");
+    }
+  },
   computed: {
+    authStore() {
+      return useAuthStore();
+    },
+    sidebarItems() {
+      return [
+        {
+          name: "My Notes",
+          onclick: (router) => {
+            router.push({ path: "/" });
+          },
+        },
+        {
+          name: "Toggle Dark Mode",
+          onclick: () => this.themeSwitch(),
+        },
+        {
+          name: "Recycle Bin",
+          onclick: (router) => {
+            router.push({ path: "/trash" });
+          },
+        },
+        {
+          name: "Login",
+          onclick: (router) => {
+            router.push({ path: "/login" });
+          },
+        },
+      ];
+    },
     currentRouteName() {
       return this.$route.name;
     },
-    displayedSidebarItems() {
-      const authStore = useAuthStore();
-      if (authStore.user) sidebarItems.filter((i) => i.name == "Login");
-      return sidebarItems;
+  },
+  methods: {
+    themeSwitch() {
+      const documentElement = document.documentElement;
+      if (documentElement.classList.contains("dark")) {
+        documentElement.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+        return;
+      }
+      documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    },
+    showCookiePopup() {
+      return !localStorage.getItem("cookiePopup");
     },
   },
 };
@@ -101,6 +117,7 @@ export default {
         <button
           v-for="item in sidebarItems"
           :key="item.name"
+          v-show="item.name != 'Login' || !loggedIn"
           @click="item.onclick($router)"
           class="dark:bg-zinc-700 w-40 text-left bg-white hover:bg-slate-300 hover:dark:bg-zinc-600 px-3 py-2 my-3 rounded-md text-base"
         >
@@ -131,6 +148,7 @@ export default {
         <Menu as="div" class="absolute right-4">
           <div>
             <MenuButton
+              :disabled="!loggedIn"
               class="flex rounded-full bg-slate-200 text-sm dark:bg-zinc-800"
             >
               <span class="sr-only">Open user menu</span>
@@ -150,7 +168,7 @@ export default {
             >
               <MenuItem v-slot="{ active }">
                 <a
-                  @click="useAuthStore().logout()"
+                  @click="this.authStore.logout()"
                   href="#"
                   :class="[
                     active ? 'bg-gray-100 dark:bg-zinc-600' : '',
