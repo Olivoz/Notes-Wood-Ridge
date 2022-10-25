@@ -40,5 +40,19 @@ export const useAuthStore = defineStore({
       callback();
       axios.post("/auth/logout").catch(console.log);
     },
+    register(username, email, password, callback) {
+      axios
+        .post("/auth/signup", {
+          username: username,
+          email: email,
+          password: password,
+        })
+        .then((res) => {
+          this.user = res.data;
+          useNoteStore().clear();
+        })
+        .then(callback)
+        .catch(console.log);
+    },
   },
 });

@@ -1,15 +1,22 @@
 <script>
+import { useAuthStore } from "../stores/AuthStore";
+
 export default {
   name: "Register",
   data() {
     return {
+      username: "",
       email: "",
       password: "",
     };
   },
   methods: {
-    login() {
-      console.log("registering account");
+    register() {
+      const authStore = useAuthStore();
+      const router = this.$router;
+      authStore.register(this.username, this.email, this.password, () => {
+        router.push({ path: "/" });
+      });
     },
   },
 };
@@ -19,6 +26,7 @@ export default {
   <div class="flex justify-center items-center mt-20">
     <div class="w-full max-w-xs">
       <form
+        @submit.prevent="register"
         class="bg-slate-200 dark:bg-zinc-800 shadow-md rounded-xl px-8 pt-6 pb-8 mb-4"
       >
         <div class="identity-input mb-4">
