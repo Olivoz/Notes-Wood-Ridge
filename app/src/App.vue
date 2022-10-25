@@ -1,7 +1,7 @@
 <script setup>
 import { RouterView } from "vue-router";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
+import { Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/vue/24/outline";
 import { useAuthStore } from "./stores/AuthStore";
 import CookiesModal from "./components/CookiesModal.vue";
 
@@ -130,13 +130,11 @@ export default {
         <!-- Profile dropdown -->
         <Menu as="div" class="absolute right-4">
           <div>
-            <MenuButton class="flex rounded-full bg-slate-200 text-sm">
+            <MenuButton
+              class="flex rounded-full bg-slate-200 text-sm dark:bg-zinc-800"
+            >
               <span class="sr-only">Open user menu</span>
-              <img
-                class="h-8 w-8 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
+              <UserIcon class="w-8 h-8" />
             </MenuButton>
           </div>
           <transition
@@ -150,26 +148,6 @@ export default {
             <MenuItems
               class="dark:bg-zinc-700 absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
-              <MenuItem v-slot="{ active }">
-                <a
-                  href="#"
-                  :class="[
-                    active ? 'bg-gray-100 dark:bg-zinc-600' : '',
-                    'block px-4 py-2 text-sm text-gray-700 dark:text-white',
-                  ]"
-                  >Your Profile</a
-                >
-              </MenuItem>
-              <MenuItem v-slot="{ active }">
-                <a
-                  href="#"
-                  :class="[
-                    active ? 'bg-gray-100 dark:bg-zinc-600' : '',
-                    'block px-4 py-2 text-sm text-gray-700 dark:text-white',
-                  ]"
-                  >Settings</a
-                >
-              </MenuItem>
               <MenuItem v-slot="{ active }">
                 <a
                   @click="useAuthStore().logout()"
