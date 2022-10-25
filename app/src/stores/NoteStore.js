@@ -121,5 +121,18 @@ export const useNoteStore = defineStore("noteStore", {
       storedTrash.unshift(note);
       localStorage.setItem("trash", JSON.stringify(storedTrash));
     },
+    deleteNote(note) {
+      const authStore = useAuthStore();
+      if (authStore.user) {
+        return;
+      }
+
+      this.trash.splice(this.trash.indexOf(note), 1);
+      this.availableTrash--;
+
+      const storedTrash = getArrayFromStorage("trash");
+      storedTrash.splice(storedTrash.indexOf(note), 1);
+      localStorage.setItem("trash", JSON.stringify(storedTrash));
+    },
   },
 });

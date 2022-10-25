@@ -7,15 +7,26 @@ const noteStore = useNoteStore();
 if (noteStore.trash.length == 0) noteStore.loadTrash();
 </script>
 
+<script>
+const noteStore = useNoteStore();
+function deleteNote(note) {
+  noteStore.deleteNote(note);
+}
+</script>
+
 <template>
-  <NoteCard v-for="note in noteStore.trash" :note="note" />
+  <NoteCard
+    v-for="note in noteStore.trash"
+    :note="note"
+    :onRemove="() => deleteNote(note)"
+  />
   <button
     v-if="noteStore.trash.length < noteStore.availableTrash"
     @click="noteStore.loadTrash"
   >
     More
   </button>
-  <RoundButton @click="deleteNote" class="bg-red-500 dark:bg-red-500"
+  <RoundButton @click="deleteNotes" class="bg-red-500 dark:bg-red-500"
     ><TrashIcon
   /></RoundButton>
 </template>
