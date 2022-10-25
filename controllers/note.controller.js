@@ -37,15 +37,19 @@ function getNotes(ids) {
 
     base("Notes")
       .select({
-        maxRecords: ids.length,
         filterByFormula: `OR(${filter})`,
+        pageSize: ids.length,
       })
-      .eachPage((records, fetchNextPage) => {
+      .firstPage((err, records) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
         const notes = records.map(noteFromRecord);
         notes.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
         resolve(notes);
-      })
-      .catch(reject);
+      });
   });
 }
 

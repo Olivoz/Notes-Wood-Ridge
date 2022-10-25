@@ -163,6 +163,7 @@ router.get("/trash/:start", (req, res) => {
   const user = req.user;
   if (!user) {
     res.sendStatus(401);
+    return;
   }
 
   const start = req.params.start;
