@@ -9,7 +9,12 @@ export const useAuthStore = defineStore({
   }),
   actions: {
     checkLoggedIn() {
-      if (!localStorage.getItem("loggedIn")) return;
+      const noteStore = useNoteStore();
+      if (!localStorage.getItem("loggedIn")) {
+        noteStore.loadNotes();
+        noteStore.loadTrash();
+        return;
+      }
       axios
         .get("/api/v1/user")
         .then((res) => {

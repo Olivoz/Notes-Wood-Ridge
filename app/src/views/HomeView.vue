@@ -5,7 +5,6 @@ import RoundButton from "../components/RoundButton.vue";
 import { PlusIcon } from "@heroicons/vue/24/outline";
 import { useNoteStore } from "../stores/NoteStore";
 const noteStore = useNoteStore();
-if (noteStore.notes.length == 0) noteStore.loadNotes();
 </script>
 
 <script>
