@@ -93,7 +93,22 @@ export const useNoteStore = defineStore("noteStore", {
       const storedTrash = getArrayFromStorage("trash");
       this.trash = storedTrash.slice(0, this.trash.length + 4);
     },
-    saveNote(note) {
+    editNote(noteId, change) {
+      const authStore = useAuthStore();
+
+      if (authStore.user) {
+        axios
+          .post(`/api/v1/note/note/${noteId}`, change)
+          .catch((err) => console.log(err.message));
+        return;
+      }
+
+      const stored = getArrayFromStorage("notes");
+      const storedNote = stored.find((i) => i.id == noteId);
+      Object.assign(storedNote, change);
+      localStorage.setItem("notes", JSON.stringify(stored));
+    },
+    createNote(note) {
       const authStore = useAuthStore();
       if (authStore.user) {
         axios

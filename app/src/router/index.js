@@ -18,8 +18,13 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
     {
-      path: "/edit",
+      path: "/edit/:id",
       name: "Edit note",
+      component: () => import("../views/EditNoteView.vue"),
+    },
+    {
+      path: "/edit",
+      name: "New note",
       component: () => import("../views/EditNoteView.vue"),
     },
     {

@@ -8,11 +8,16 @@ export default {
     note: Object,
     onRemove: Function,
   },
+  methods: {
+    editNote() {
+      this.$router.push({ path: `/edit/${this.note.id}` });
+    },
+  },
 };
 </script>
 
 <template>
-  <div class="mt-10 h-8 dark:text-white">
+  <div @click="editNote" class="mt-10 h-8 dark:text-white">
     <button
       class="flex justify-between py-2 px-6 bg-slate-200 rounded-xl w-full dark:bg-zinc-800"
     >
