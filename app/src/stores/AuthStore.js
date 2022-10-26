@@ -36,16 +36,22 @@ export const useAuthStore = defineStore({
         })
         .then((res) => {
           this.user = res.data;
-          useNoteStore().clear();
           localStorage.setItem("loggedIn", true);
+          const noteStore = useNoteStore();
+          noteStore.clear();
+          noteStore.loadNotes();
+          noteStore.loadTrash();
         })
         .then(callback)
         .catch(console.log);
     },
     logout(callback) {
       this.user = null;
-      useNoteStore().clear();
-      localStorage.removeItem("loggedIn");
+      localStorage.setItem("loggedIn", false);
+      const noteStore = useNoteStore();
+      noteStore.clear();
+      noteStore.loadNotes();
+      noteStore.loadTrash();
       axios.post("/auth/logout").then(callback).catch(console.log);
     },
     register(username, email, password, callback) {
@@ -57,8 +63,11 @@ export const useAuthStore = defineStore({
         })
         .then((res) => {
           this.user = res.data;
-          useNoteStore().clear();
           localStorage.setItem("loggedIn", true);
+          const noteStore = useNoteStore();
+          noteStore.clear();
+          noteStore.loadNotes();
+          noteStore.loadTrash();
         })
         .then(callback)
         .catch(console.log);
