@@ -1,8 +1,7 @@
 <script setup>
 import NoteCard from "../components/NoteCard.vue";
-import RoundButton from "../components/RoundButton.vue";
 import DeleteModal from "../components/DeleteModal.vue";
-import { TrashIcon, ArrowUturnLeftIcon } from "@heroicons/vue/24/outline";
+import { ArrowUturnLeftIcon } from "@heroicons/vue/24/outline";
 import { useNoteStore } from "../stores/NoteStore";
 const noteStore = useNoteStore();
 </script>
@@ -65,10 +64,4 @@ let toDelete;
     :confirmButton="() => deleteNote(noteStore, toDelete)"
     :cancelButton="cancelDeleteMenu"
   />
-
-  <RoundButton
-    @click="deleteNotes"
-    class="bg-red-500 dark:bg-red-500 hover:animate-bounce"
-    ><TrashIcon
-  /></RoundButton>
 </template>
